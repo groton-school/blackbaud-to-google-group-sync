@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef2b01fdc501ef3f2bf4c66262776ca1",
+    "content-hash": "a5c9d4e72bbb948ecab42f063313ad3f",
     "packages": [
         {
             "name": "battis/path",
@@ -814,7 +814,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-memcached": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }

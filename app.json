@@ -1,0 +1,21 @@
+{
+    "addons": ["memcachedcloud:30"],
+    "env": {
+        "BLACKBAUD_ACCESS_KEY": {
+            "description": "Generated at https://developer.blackbaud.com/subscriptions/",
+            "value": ""
+        },
+        "BLACKBAUD_CLIENT_ID": {
+            "description": "Generated at https://developer.blackbaud.com/apps/",
+            "value": ""
+        },
+        "BLACKBAUD_CLIENT_SECRET": {
+            "description": "Generated at https://developer.blackbaud.com/apps/",
+            "value": ""
+        },
+        "BLACKBAUD_REDIRECT_URL": {
+            "description": "URL to <app>/token.php",
+            "value": ""
+        }
+    }
+}
