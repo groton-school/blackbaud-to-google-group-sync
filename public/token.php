@@ -69,6 +69,9 @@ if (!isset($_GET["code"])) {
             $_ENV["MEMCACHEDCLOUD_PASSWORD"]
         );
         $mc->set("token", $accessToken);
+
+        $school = $sky->endpoint("school/v1");
+        $lists = $school->get("lists");
     } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
         // Failed to get the access token or user details.
         exit($e->getMessage());
@@ -96,6 +99,6 @@ if (!isset($_GET["code"])) {
     </form>
 
     <h3><code>GET /school/v1/levels</code></h3>
-    <pre lang="json"><?= json_encode($levels, JSON_PRETTY_PRINT) ?></pre>
+    <pre lang="json"><?= json_encode($lists, JSON_PRETTY_PRINT) ?></pre>
     </body>
 </html>
