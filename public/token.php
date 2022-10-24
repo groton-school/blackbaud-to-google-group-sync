@@ -68,7 +68,7 @@ if (!isset($_GET["code"])) {
             $_ENV["MEMCACHEDCLOUD_USERNAME"],
             $_ENV["MEMCACHEDCLOUD_PASSWORD"]
         );
-        $mc->set("token", $accessToken);
+        $mc->set("blackbaud_token", $accessToken);
 
         $school = $sky->endpoint("school/v1");
         $lists = $school->get("lists");

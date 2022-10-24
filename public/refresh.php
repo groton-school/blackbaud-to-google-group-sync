@@ -33,13 +33,13 @@ $mc->setSaslAuthData(
     $_ENV["MEMCACHEDCLOUD_PASSWORD"]
 );
 
-$existingAccessToken = $mc->get("token"); // get access token from your data store
+$existingAccessToken = $mc->get("blackbaud_token"); // get access token from your data store
 
 // FIXME normally we'd test $existingAccessToken->hasExpired() before refreshing
 $newAccessToken = $sky->getAccessToken("refresh_token", [
     "refresh_token" => $existingAccessToken->getRefreshToken(),
 ]);
-$mc->set("token", $newAccessToken);
+$mc->set("blackbaud_token", $newAccessToken);
 
 // Purge old access token and store new access token to your data store.
 ?>

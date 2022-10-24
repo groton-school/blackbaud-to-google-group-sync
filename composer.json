@@ -3,7 +3,10 @@
     "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
     "require": {
         "groton-school/oauth2-blackbaudsky": "^0.1.1",
-        "ext-memcached": "*"
+        "ext-memcached": "*",
+        "google/auth": "^1.23",
+        "guzzlehttp/guzzle": "^7.5",
+        "google/apiclient": "^2.12"
     },
     "license": "MIT",
     "authors": [
