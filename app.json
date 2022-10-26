@@ -14,7 +14,14 @@
             "value": ""
         },
         "BLACKBAUD_REDIRECT_URL": {
-            "description": "URL to <app>/token.php",
+            "description": "URL to <heroku app instance>/token.php",
+            "value": ""
+        },
+        "GOOGLE_CREDENTIALS": {
+            "description": "Contents of downloaded service worker credentials JSON file"
+        },
+        "GOOGLE_DELEGATED_ADMIN": {
+            "descripion": "Email address of a Google Workspace admin user that owns the service worker account",
             "value": ""
         }
     }
