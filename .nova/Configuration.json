@@ -70,7 +70,8 @@
     "xsl",
     "Zend OPcache",
     "zip",
-    "zlib"
+    "zlib",
+    "memcached"
   ],
   "intelephense.workspace-stubs" : [
     "apache",
