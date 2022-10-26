@@ -11,18 +11,18 @@ $sky = new BlackbaudSKY([
      * Blackbaud subscription access key
      * @link https://developer.blackbaud.com/subscriptions/
      */
-    BlackbaudSKY::ACCESS_KEY => getenv("BLACKBAUD_ACCESS_KEY"),
+    BlackbaudSKY::ACCESS_KEY => $_ENV["BLACKBAUD_ACCESS_KEY"],
 
     /**
      * OAuth 2.0 App Credentials
      * @link https://developer.blackbaud.com/apps/
      */
     // The client ID assigned to you by the provider
-    "clientId" => getenv("BLACKBAUD_CLIENT_ID"),
+    "clientId" => $_ENV["BLACKBAUD_CLIENT_ID"],
     // The client password assigned to you by the provider
-    "clientSecret" => getenv("BLACKBAUD_CLIENT_SECRET"),
+    "clientSecret" => $_ENV["BLACKBAUD_CLIENT_SECRET"],
     // Redirect URI registered with the provider
-    "redirectUri" => getenv("BLACKBAUD_REDIRECT_URL"),
+    "redirectUri" => $_ENV["BLACKBAUD_REDIRECT_URL"],
 ]);
 
 // If we don't have an authorization code then get one
