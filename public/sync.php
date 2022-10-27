@@ -115,8 +115,8 @@ try {
     // create Google API client using private key
     $google = new Client();
     $google->setApplicationName(APP_NAME);
-    $google->setAuthConfig(json_decode($_ENV["Google_CREDENTIALS"], true));
-    $google->setSubject($_ENV["Google_DELEGATED_ADMIN"]);
+    $google->setAuthConfig(json_decode($_ENV[Google_CREDENTIALS], true));
+    $google->setSubject($_ENV[Google_DELEGATED_ADMIN]);
     $google->setScopes([
         "https://www.googleapis.com/auth/admin.directory.group",
     ]);
@@ -127,64 +127,70 @@ try {
     $school = $school = $sky->endpoint("school/v1");
 
     step("api clients configured");
-    dump($token, "token");
 
     $lists = $school->get("lists");
-
-    dump($lists, "lists");
 
     foreach ($lists["value"] as $list) {
         if ($list["category"] === APP_NAME) {
             $bbGroup = new Group($list);
             step($bbGroup->getName());
+            dump($bbGroup, "bbGroup");
             $response = $school->get("lists/advanced/{$list["id"]}");
-            dump($response, "response");
             // TODO deal with pagination (1000 rows per page, probably not an immediate huge deal)
             /** @var Member[] */
             $bbMembers = [];
-            array_walk($response["results"], function ($data) use ($bbMembers) {
+            foreach ($response["results"]["rows"] as $data) {
                 $member = new Member($data);
+                dump($member, "member");
                 $bbMembers[$member->getEmail()] = $member;
-            });
+            }
             dump($bbMembers, "bbMembers");
 
+            step("compare to Google membership");
+            $purge = [];
             foreach (
                 $directory->members->listMembers($bbGroup->getParamEmail())
                 as $gMember
             ) {
+                // TODO update group name
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
-                $purge = [];
+                // FIXME don't purge group owners? cofigurable?
                 if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                     unset($bbMembers[$gMember->getEmail()]);
                 } else {
                     array_push($purge, $gMember);
                 }
-                dump($purge, "purge");
-                dump($bbMembers, "bbMembers");
-                foreach ($purge as $gMember) {
-                    step("purge " . $gMember->getEmail());
-                    dump(
+            }
+            dump($purge, "purge");
+            dump($bbMembers, "bbMembers");
+            step("purge members not present in Bb group");
+            foreach ($purge as $gMember) {
+                step("purge " . $gMember->getEmail());
+                /*dump(
                         $directory->members->delete(
                             $bbGroup->getParamEmail(),
                             $gMember->getEmail()
                         )
-                    );
-                }
-                foreach ($bbMembers as $bbMember) {
-                    step("add " + $bbMember->getEmail());
-                    dump(
-                        $directory->members->insert(
-                            $bbGroup->getParamEmail(),
-                            new DirectoryMember([
-                                "email" => $bbMember->getEmail(),
-                            ])
-                        )
-                    );
-                }
+                    );*/
+            }
+            step("add members not present in Google group");
+            foreach ($bbMembers as $bbMember) {
+                step("add " . $bbMember->getEmail());
+                dump(
+                    $directory->members->insert(
+                        $bbGroup->getParamEmail(),
+                        new DirectoryMember([
+                            "email" => $bbMember->getEmail(),
+                        ])
+                    )
+                );
             }
         }
     }
+    step("complete");
 } catch (Exception $e) {
-    dump($e->getTraceAsString(), $e->getMessage());
+    step("EXCEPTION");
+    dump($e->getMessage());
+    dump($e->getTraceAsString());
 }
