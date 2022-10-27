@@ -2,6 +2,8 @@
 
 namespace GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud;
 
+use Exception;
+
 class Group
 {
     private string $id;
@@ -31,18 +33,35 @@ class Group
         return $this->name;
     }
 
-    public function getParamEmail()
+    public function getParam(string $name, $default = null)
     {
-        return $this->params["email"] ?: false;
+        if (isset($this->params[$name])) {
+            return $this->params[$name];
+        } else {
+            if ($default instanceof Exception) {
+                throw $default;
+            } else {
+                return $default;
+            }
+        }
+    }
+
+    /**
+     * @return string
+     * @throws Exception if no email configured
+     */
+    public function getParamEmail(): string
+    {
+        return $this->getParam("email", new Exception("no email configured"));
     }
 
     public function getParamUpdateName(): bool
     {
-        return $this->params["update-name"] ?: false;
+        return $this->getParam("update-name", true);
     }
 
     public function getParamDangerouslyPurgeGoogleGroupOwners(): bool
     {
-        return $this->params["dangerously-purge-google-group-owners"] ?: false;
+        return $this->getParam("dangerously-purge-google-group-owners", false);
     }
 }

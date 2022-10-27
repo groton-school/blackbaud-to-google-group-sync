@@ -109,7 +109,7 @@ In configuring the advanced list, we need to pay attention to:
 2. The `Category` in which the list resides. As there are many advanced lists, we use this as a filter to determine which lists are relevant to the script. Currently, the script examines all lists in the `Blackbaud to Google Group Sync` category.
 3. The `Description` can be the usual free-form text, but _must_ also contain at at least one JSON-encoded parameter. At present, the only supported parameter is `email`, but additional paramters are planned:
     - `email` a text value: the email address of the destination Google Group into which to sync this membership
-    - `update-name` is a boolean value, defaulting to `false`, that determines whether or not to update the name of the Google Group to match the name of the list.
+    - `update-name` is a boolean value, defaulting to `true`, that determines whether or not to update the name of the Google Group to match the name of the list (which is presumptively the name of the group too).
     - `dangerously-purge-google-group-owners` is a boolean value, defaulting to `false`, that determines whether or not to pay attention to a Google Group member's ownership role when deciding to purge them from the group if they are not members of the Blackbaud community group.
 
 Generically, the list would display the following:

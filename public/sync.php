@@ -52,7 +52,7 @@ function dump($m, $name = false)
         echo "<h5>$name</h5>";
     }
     echo "<pre>";
-    print_r($m);
+    var_dump($m);
     echo "</pre>";
 }
 
@@ -158,7 +158,6 @@ try {
                 as $gMember
             ) {
                 dump($gMember, "gMember");
-                // TODO process update-name parameter to update the group name
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
                 if (array_key_exists($gMember->getEmail(), $bbMembers)) {
@@ -196,6 +195,18 @@ try {
                         ])
                     )
                 );
+            }
+
+            // TODO Do we want to think about how to update the actual email address?
+            step("update name");
+            dump($bbGroup->getParamUpdateName(), "update-name");
+            if ($bbGroup->getParamUpdateName()) {
+                $gGroup = $directory->groups->get($bbGroup->getParamEmail());
+                if ($gGroup->getName() != $bbGroup->getName()) {
+                    $gGroup->setName($bbGroup->getName());
+                    dump($gGroup, "gGroup");
+                    dump($directory->groups->update($gGroup->getId(), $gGroup));
+                }
             }
         }
     }
