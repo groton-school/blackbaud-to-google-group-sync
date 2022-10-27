@@ -11,6 +11,9 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 session_start();
 
+// TODO objectify this script so it's not a hunk of spaghetti code
+// TODO implement daemon or crontab scheduling for regular runs
+
 define("APP_NAME", "Blackbaud to Google Group Sync");
 
 // environment variables
@@ -35,6 +38,8 @@ define("CODE", "code");
 define("STATE", "state");
 define("AUTHORIZATION_CODE", "authorization_code");
 define("REFRESH_TOKEN", "refresh_token");
+
+// TODO implement logging and/or notifications
 
 function step($m)
 {
