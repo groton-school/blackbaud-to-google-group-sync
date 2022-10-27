@@ -35,4 +35,14 @@ class Group
     {
         return $this->params["email"] ?: false;
     }
+
+    public function getParamUpdateName(): bool
+    {
+        return $this->params["update-name"] ?: false;
+    }
+
+    public function getParamDangerouslyPurgeGoogleGroupOwners(): bool
+    {
+        return $this->params["dangerously-purge-google-group-owners"] ?: false;
+    }
 }

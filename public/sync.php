@@ -157,14 +157,20 @@ try {
                 $directory->members->listMembers($bbGroup->getParamEmail())
                 as $gMember
             ) {
+                dump($gMember, "gMember");
                 // TODO process update-name parameter to update the group name
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
-                // TODO process dangerously-purge-google-group-owners parameter
                 if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                     unset($bbMembers[$gMember->getEmail()]);
                 } else {
-                    array_push($purge, $gMember);
+                    if (
+                        $gMember->getRole() !== "OWNER" ||
+                        ($bbGroup->getParamDangerouslyPurgeGoogleGroupOwners() &&
+                            $gMember->getRole() === "OWNER")
+                    ) {
+                        array_push($purge, $gMember);
+                    }
                 }
             }
             dump($purge, "purge");
@@ -172,13 +178,12 @@ try {
             step("purge members not present in Bb group");
             foreach ($purge as $gMember) {
                 step("purge " . $gMember->getEmail());
-                // TODO actually purge (after setting up the dangerously-purge-google-group-owneers param)
-                /*dump(
-                        $directory->members->delete(
-                            $bbGroup->getParamEmail(),
-                            $gMember->getEmail()
-                        )
-                    );*/
+                dump(
+                    $directory->members->delete(
+                        $bbGroup->getParamEmail(),
+                        $gMember->getEmail()
+                    )
+                );
             }
             step("add members not present in Google group");
             foreach ($bbMembers as $bbMember) {
