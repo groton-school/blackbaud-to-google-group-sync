@@ -141,6 +141,7 @@ try {
             step($bbGroup->getName());
             dump($bbGroup, "bbGroup");
             $response = $school->get("lists/advanced/{$list["id"]}");
+            // TODO deal with pagination (1000 rows per page, probably not an immediate huge deal)
             /** @var Member[] */
             $bbMembers = [];
             foreach ($response["results"]["rows"] as $data) {
@@ -156,8 +157,10 @@ try {
                 $directory->members->listMembers($bbGroup->getParamEmail())
                 as $gMember
             ) {
+                // TODO process update-name parameter to update the group name
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
+                // TODO process dangerously-purge-google-group-owners parameter
                 if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                     unset($bbMembers[$gMember->getEmail()]);
                 } else {
@@ -169,6 +172,7 @@ try {
             step("purge members not present in Bb group");
             foreach ($purge as $gMember) {
                 step("purge " . $gMember->getEmail());
+                // TODO actually purge (after setting up the dangerously-purge-google-group-owneers param)
                 /*dump(
                         $directory->members->delete(
                             $bbGroup->getParamEmail(),
