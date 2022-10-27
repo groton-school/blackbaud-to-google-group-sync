@@ -99,8 +99,7 @@ try {
             ]);
             $cache->set(Bb_TOKEN, $token);
         }
-        //    } elseif ($token->hasExpired()) {
-    } else {
+    } elseif ($token->hasExpired()) {
         step("refresh Bb access token");
         dump($token);
         // use refresh token to get new Bb access token
@@ -109,6 +108,8 @@ try {
         ]);
         $cache->set(Bb_TOKEN, $newToken);
         $token = $newToken;
+    } else {
+        $sky->setAccessToken($token);
     }
 
     // create Google API client using private key

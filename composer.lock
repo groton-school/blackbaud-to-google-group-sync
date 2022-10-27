@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dd9d879a1e9a609bfaa356a2ae17eec",
+    "content-hash": "df468638904e5e64939846a8e39050ce",
     "packages": [
         {
             "name": "battis/path",
@@ -221,16 +221,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.23.0",
+            "version": "v1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "8da16102d2cd1bdc128d97f323553df465ee7701"
+                "reference": "cb43cb8ccde76ace65ec40130a9e9c2a15ecfe17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/8da16102d2cd1bdc128d97f323553df465ee7701",
-                "reference": "8da16102d2cd1bdc128d97f323553df465ee7701",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/cb43cb8ccde76ace65ec40130a9e9c2a15ecfe17",
+                "reference": "cb43cb8ccde76ace65ec40130a9e9c2a15ecfe17",
                 "shasum": ""
             },
             "require": {
@@ -273,28 +273,32 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.23.0"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.23.1"
             },
-            "time": "2022-09-27T16:27:23+00:00"
+            "time": "2022-10-26T20:30:45+00:00"
         },
         {
             "name": "groton-school/oauth2-blackbaudsky",
-            "version": "v0.1.1",
+            "version": "v0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/groton-school/OAuth2-BlackbaudSKY.git",
-                "reference": "dfd7adf405e33818164a80e205ba61f80438a395"
+                "reference": "7ba209e997b5060da8b6133c976a02a26771410f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/groton-school/OAuth2-BlackbaudSKY/zipball/dfd7adf405e33818164a80e205ba61f80438a395",
-                "reference": "dfd7adf405e33818164a80e205ba61f80438a395",
+                "url": "https://api.github.com/repos/groton-school/OAuth2-BlackbaudSKY/zipball/7ba209e997b5060da8b6133c976a02a26771410f",
+                "reference": "7ba209e997b5060da8b6133c976a02a26771410f",
                 "shasum": ""
             },
             "require": {
                 "battis/path": "^0.1.0",
                 "guzzlehttp/guzzle": "^7.4",
                 "league/oauth2-client": "^2.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.4",
+                "squizlabs/php_codesniffer": "^3.6"
             },
             "type": "library",
             "autoload": {
@@ -315,9 +319,9 @@
             "description": "This package provides Blackbaud SKY OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
             "support": {
                 "issues": "https://github.com/groton-school/OAuth2-BlackbaudSKY/issues",
-                "source": "https://github.com/groton-school/OAuth2-BlackbaudSKY/tree/v0.1.1"
+                "source": "https://github.com/groton-school/OAuth2-BlackbaudSKY/tree/v0.2"
             },
-            "time": "2021-12-19T16:45:46+00:00"
+            "time": "2022-10-27T01:06:12+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

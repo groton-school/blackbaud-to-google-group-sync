@@ -4,9 +4,9 @@ namespace GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud;
 
 class Member
 {
-    private string $hostId;
+    private string $hostId = "";
 
-    private string $email;
+    private string $email = "";
 
     private array $data;
 
