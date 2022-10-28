@@ -13,6 +13,7 @@ session_start();
 
 // TODO objectify this script so it's not a hunk of spaghetti code
 // TODO implement daemon or crontab scheduling for regular runs
+// TODO update documentation to remove the (redundant) community groups step
 
 define("APP_NAME", "Blackbaud to Google Group Sync");
 
@@ -152,6 +153,8 @@ try {
             dump($bbMembers, "bbMembers");
 
             step("compare to Google membership");
+            // TODO need to test for existence of Google Group and create if not present
+            // TODO should have a param that determines if Google Groups are created if not found
             $purge = [];
             foreach (
                 $directory->members->listMembers($bbGroup->getParamEmail())
