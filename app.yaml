@@ -1,0 +1,3 @@
+runtime: php81
+app_engine_apis: true
+entrypoint: serve public/index.php

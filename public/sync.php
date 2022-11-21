@@ -1,11 +1,14 @@
 <?php
 
+use Google\AppEngine\Api\Memcache\Memcached;
 use Google\Client;
 use Google\Service\Directory;
 use Google\Service\Directory\Member as DirectoryMember;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Group;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
+use GrotonSchool\BlackbaudToGoogleGroupSync\Google\Secrets;
 use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
+use League\OAuth2\Client\Token\AccessToken;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
@@ -22,10 +25,6 @@ define("Bb_ACCESS_KEY", "BLACKBAUD_ACCESS_KEY");
 define("Bb_CLIENT_ID", "BLACKBAUD_CLIENT_ID");
 define("Bb_CLIENT_SECRET", "BLACKBAUD_CLIENT_SECRET");
 define("Bb_REDIRECT_URL", "BLACKBAUD_REDIRECT_URL");
-
-define("Memcached_SERVERS", "MEMCACHEDCLOUD_SERVERS");
-define("Memcached_USERNAME", "MEMCACHEDCLOUD_USERNAME");
-define("Memcached_PASSWORD", "MEMCACHEDCLOUD_PASSWORD");
 
 define("Google_DELEGATED_ADMIN", "GOOGLE_DELEGATED_ADMIN");
 define("Google_CREDENTIALS", "GOOGLE_CREDENTIALS");
@@ -58,28 +57,19 @@ function dump($m, $name = false)
 }
 
 try {
-    // connect to Memcached server for cached tokens
+    // connect to Memcached for cached tokens
     $cache = new Memcached();
-    $cache->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
-    $cache->addServers(
-        array_map(function ($server) {
-            return explode(":", $server, 2);
-        }, explode(",", $_ENV[Memcached_SERVERS]))
-    );
-    $cache->setSaslAuthData(
-        $_ENV[Memcached_USERNAME],
-        $_ENV[Memcached_PASSWORD]
-    );
 
     // Blackbaud OAuth2 client
     $sky = new BlackbaudSKY([
-        BlackbaudSKY::ACCESS_KEY => $_ENV[Bb_ACCESS_KEY],
-        "clientId" => $_ENV[Bb_CLIENT_ID],
-        "clientSecret" => $_ENV[Bb_CLIENT_SECRET],
-        "redirectUri" => $_ENV[Bb_REDIRECT_URL],
+        BlackbaudSKY::ACCESS_KEY => Secrets::get(Bb_ACCESS_KEY),
+        "clientId" => Secrets::get(Bb_CLIENT_ID),
+        "clientSecret" => Secrets::get(Bb_CLIENT_SECRET),
+        "redirectUri" => Secrets::get(Bb_REDIRECT_URL),
     ]);
 
     // acquire a Bb SKY API access token
+    /** @var AccessToken|null $token **/
     $token = $cache->get(Bb_TOKEN);
     if (empty($token)) {
         // interactively acquire a new Bb access token
@@ -121,8 +111,8 @@ try {
     // create Google API client using private key
     $google = new Client();
     $google->setApplicationName(APP_NAME);
-    $google->setAuthConfig(json_decode($_ENV[Google_CREDENTIALS], true));
-    $google->setSubject($_ENV[Google_DELEGATED_ADMIN]);
+    $google->setAuthConfig(json_decode(Secrets::get(Google_CREDENTIALS), true));
+    $google->setSubject(Secrets::get(Google_DELEGATED_ADMIN));
     $google->setScopes([
         "https://www.googleapis.com/auth/admin.directory.group",
     ]);
