@@ -1,8 +1,5 @@
 #!include:.gitignore
 .git*
-
 *.md
-vendor
 docs
-
 .nova
