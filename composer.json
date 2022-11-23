@@ -3,6 +3,7 @@
     "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
     "require": {
         "ext-memcached": "*",
+        "battis/lazy-secrets": "^0.1",
         "google/apiclient": "^2.12",
         "google/appengine-php-sdk": "^2.1",
         "google/cloud-secret-manager": "^1.9",

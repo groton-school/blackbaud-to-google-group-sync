@@ -1,12 +1,12 @@
 <?php
 
+use Battis\LazySecrets\Secrets;
 use Google\AppEngine\Api\Memcache\Memcached;
 use Google\Client;
 use Google\Service\Directory;
 use Google\Service\Directory\Member as DirectoryMember;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Group;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
-use GrotonSchool\BlackbaudToGoogleGroupSync\Google\Secrets;
 use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
 use League\OAuth2\Client\Token\AccessToken;
 

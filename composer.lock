@@ -4,8 +4,48 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff314e609f32187d3dced585c57cf597",
+    "content-hash": "4fa0d7dad534eec4e3bfd4371c24a403",
     "packages": [
+        {
+            "name": "battis/lazy-secrets",
+            "version": "v0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/battis/lazy-secrets.git",
+                "reference": "66fc8fbe45310087439348ee38c28a066e751682"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/battis/lazy-secrets/zipball/66fc8fbe45310087439348ee38c28a066e751682",
+                "reference": "66fc8fbe45310087439348ee38c28a066e751682",
+                "shasum": ""
+            },
+            "require": {
+                "google/cloud-secret-manager": "^1.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Battis\\LazySecrets\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Seth Battis",
+                    "email": "seth@battis.net"
+                }
+            ],
+            "description": "A (thin) wrapper for google/cloud-secret-manager to reduce boilerplate",
+            "support": {
+                "issues": "https://github.com/battis/lazy-secrets/issues",
+                "source": "https://github.com/battis/lazy-secrets/tree/v0.1"
+            },
+            "time": "2022-11-23T20:11:22+00:00"
+        },
         {
             "name": "battis/path",
             "version": "v0.1",
@@ -126,16 +166,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.3.0",
+            "version": "v6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8"
+                "reference": "ddfaddcb520488b42bca3a75e17e9dd53c3667da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
-                "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/ddfaddcb520488b42bca3a75e17e9dd53c3667da",
+                "reference": "ddfaddcb520488b42bca3a75e17e9dd53c3667da",
                 "shasum": ""
             },
             "require": {
@@ -182,9 +222,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.3.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.3.1"
             },
-            "time": "2022-07-15T16:48:45+00:00"
+            "time": "2022-11-01T21:20:08+00:00"
         },
         {
             "name": "google/apiclient",
@@ -258,16 +298,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.272.0",
+            "version": "v0.275.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "52b494231f6b531983d12aefac057d0eeec2861c"
+                "reference": "fe34eef7717556c2e64dfc37de3fde930a23a68f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/52b494231f6b531983d12aefac057d0eeec2861c",
-                "reference": "52b494231f6b531983d12aefac057d0eeec2861c",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/fe34eef7717556c2e64dfc37de3fde930a23a68f",
+                "reference": "fe34eef7717556c2e64dfc37de3fde930a23a68f",
                 "shasum": ""
             },
             "require": {
@@ -296,9 +336,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.272.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.275.0"
             },
-            "time": "2022-10-21T01:18:13+00:00"
+            "time": "2022-11-18T01:28:37+00:00"
         },
         {
             "name": "google/appengine-php-sdk",
