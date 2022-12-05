@@ -16,7 +16,6 @@ session_start();
 
 // TODO objectify this script so it's not a hunk of spaghetti code
 // TODO implement daemon or crontab scheduling for regular runs
-// TODO update documentation to remove the (redundant) community groups step
 
 define("APP_NAME", "Blackbaud to Google Group Sync");
 

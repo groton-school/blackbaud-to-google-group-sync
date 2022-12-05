@@ -77,7 +77,11 @@ For example, an attempt by the service account to access users, rather than grou
 1. Click the link above
 2. Fill in the blanks on the environment variables
 
+#### TODO Document Google App Engine instead of Heroku
+
 ## Management
+
+### TODO update documentation to remove the (redundant) community groups step
 
 The basic idea of this script is that it will perform a one-way sync of membership in a subset of Blackbaud community groups into specific Google Groups. Thus, Blackbaud community groups can be set up with SmartGroup rosters that automatically refresh, the sync process runs regularly, and Google Group memberships are updated automatically to match, allowing for the creation of SIS-driven, role-based groups in Google.
 
