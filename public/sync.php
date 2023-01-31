@@ -189,7 +189,6 @@ try {
                 );
             }
 
-            // TODO Do we want to think about how to update the actual email address?
             step("update name");
             dump($bbGroup->getParamUpdateName(), "update-name");
             if ($bbGroup->getParamUpdateName()) {
