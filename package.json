@@ -15,7 +15,7 @@
     "name": "Seth Battis",
     "url": "https://github.com/groton-school"
   },
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@battis/eslint-config": "github:battis/eslint-config",
     "@battis/prettier-config": "github:battis/prettier-config",
