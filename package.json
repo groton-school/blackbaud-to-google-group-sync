@@ -1,0 +1,28 @@
+{
+  "name": "blackbaud-to-google-group-sync",
+  "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf public",
+    "build": "webpack",
+    "serve": "webpack serve",
+    "deploy": "source .env; yes | gcloud app deploy --project=$PROJECT"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Seth Battis",
+    "url": "https://github.com/groton-school"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@battis/eslint-config": "github:battis/eslint-config",
+    "@battis/prettier-config": "github:battis/prettier-config",
+    "@battis/webpack-typescript-spa": "github:battis/webpack-typescript-spa",
+    "rimraf": "^4.1.2"
+  },
+  "prettier": "@battis/prettier-config",
+  "eslintConfig": {
+    "extends": "@battis/eslint-config"
+  }
+}

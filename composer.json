@@ -1,27 +1,27 @@
 {
-    "name": "groton-school/blackbaud-to-google-group-sync",
-    "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
-    "require": {
-        "ext-memcached": "*",
-        "battis/lazy-secrets": "^0.1",
-        "google/apiclient": "^2.12",
-        "google/appengine-php-sdk": "^2.1",
-        "google/cloud-secret-manager": "^1.9",
-        "groton-school/oauth2-blackbaudsky": "^0.2"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Seth Battis",
-            "email": "sbattis@groton.org"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "GrotonSchool\\BlackbaudToGoogleGroupSync\\": "src"
-        }
-    },
-    "config": {
-        "sort-packages": true
+  "name": "groton/blackbaud-to-google-group-sync",
+  "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
+  "require": {
+    "ext-memcached": "*",
+    "battis/lazy-secrets": "^0.1",
+    "google/apiclient": "^2.12",
+    "google/appengine-php-sdk": "^2.1",
+    "google/cloud-secret-manager": "^1.9",
+    "groton-school/oauth2-blackbaudsky": "^0.2"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Seth Battis",
+      "url": "https://github.com/groton-school"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "GrotonSchool\\BlackbaudToGoogleGroupSync\\": "src/server"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
 }

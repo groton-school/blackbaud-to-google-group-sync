@@ -1,5 +1,6 @@
-#!include:.gitignore
-.git*
-*.md
-docs
-.nova
+*
+!app.yaml
+!php.ini
+!public
+!src/server
+!vendor
