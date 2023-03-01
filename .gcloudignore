@@ -9,6 +9,7 @@ package.json
 pnpm-lock.yaml
 !public/
 README.md
+src/client/
 template/
 tsconfig.json
 webpack.config.js
