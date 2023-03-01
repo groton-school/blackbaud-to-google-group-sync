@@ -1,4 +1,6 @@
 runtime: php81
+basic_scaling:
+  max_instances: 1
 app_engine_apis: true
 entrypoint: serve public/index.php
 handlers:
