@@ -147,6 +147,5 @@
     "zlib"
   ],
   "workspace.art_style" : 1,
-  "workspace.color" : 6,
-  "workspace.name" : "blackbaud-to-google-groups-sync"
+  "workspace.color" : 12
 }
