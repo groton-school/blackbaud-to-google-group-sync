@@ -1,3 +1,12 @@
 runtime: php81
 app_engine_apis: true
 entrypoint: serve public/index.php
+handlers:
+  - url: /
+    static_files: public/index.html
+    upload: public/index.html
+  - url: /(.*\.php)
+    script: public/\1
+  - url: /(.*)
+    static_files: public/\1
+    upload: public/.*

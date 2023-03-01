@@ -763,20 +763,21 @@
         },
         {
             "name": "groton-school/oauth2-blackbaudsky",
-            "version": "v0.2",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/groton-school/OAuth2-BlackbaudSKY.git",
-                "reference": "7ba209e997b5060da8b6133c976a02a26771410f"
+                "reference": "4a1e3b548aee3ee81a3eb254efc913124c16a708"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/groton-school/OAuth2-BlackbaudSKY/zipball/7ba209e997b5060da8b6133c976a02a26771410f",
-                "reference": "7ba209e997b5060da8b6133c976a02a26771410f",
+                "url": "https://api.github.com/repos/groton-school/OAuth2-BlackbaudSKY/zipball/4a1e3b548aee3ee81a3eb254efc913124c16a708",
+                "reference": "4a1e3b548aee3ee81a3eb254efc913124c16a708",
                 "shasum": ""
             },
             "require": {
                 "battis/path": "^0.1.0",
+                "ext-curl": "*",
                 "guzzlehttp/guzzle": "^7.4",
                 "league/oauth2-client": "^2.6"
             },
@@ -803,9 +804,9 @@
             "description": "This package provides Blackbaud SKY OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
             "support": {
                 "issues": "https://github.com/groton-school/OAuth2-BlackbaudSKY/issues",
-                "source": "https://github.com/groton-school/OAuth2-BlackbaudSKY/tree/v0.2"
+                "source": "https://github.com/groton-school/OAuth2-BlackbaudSKY/tree/v0.2.1"
             },
-            "time": "2022-10-27T01:06:12+00:00"
+            "time": "2023-03-01T20:27:25+00:00"
         },
         {
             "name": "grpc/grpc",
