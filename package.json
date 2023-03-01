@@ -7,7 +7,7 @@
     "clean": "rimraf public",
     "build": "webpack",
     "serve": "webpack serve",
-    "deploy": "source .env; yes | gcloud app deploy --project=$PROJECT"
+    "deploy": "source .env; yes | gcloud app deploy --project=$PROJECT --verbosity=info"
   },
   "keywords": [],
   "author": {

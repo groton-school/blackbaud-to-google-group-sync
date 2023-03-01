@@ -3,4 +3,5 @@
 !php.ini
 !public
 !src/server
-!vendor
+!vendor/**/*.php
+!vendor/**/*.json
