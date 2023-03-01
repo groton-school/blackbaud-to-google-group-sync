@@ -13,7 +13,7 @@
   "authors": [
     {
       "name": "Seth Battis",
-      "url": "https://github.com/groton-school"
+      "homepage": "https://github.com/groton-school"
     }
   ],
   "autoload": {
