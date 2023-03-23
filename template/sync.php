@@ -10,33 +10,33 @@ use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
 use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
 use League\OAuth2\Client\Token\AccessToken;
 
-require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
 // TODO objectify this script so it's not a hunk of spaghetti code
 // TODO implement daemon or crontab scheduling for regular runs
 
-define("APP_NAME", "Blackbaud to Google Group Sync");
+define('APP_NAME', 'Blackbaud to Google Group Sync');
 
 // environment variables
-define("Bb_ACCESS_KEY", "BLACKBAUD_ACCESS_KEY");
-define("Bb_CLIENT_ID", "BLACKBAUD_CLIENT_ID");
-define("Bb_CLIENT_SECRET", "BLACKBAUD_CLIENT_SECRET");
-define("Bb_REDIRECT_URL", "BLACKBAUD_REDIRECT_URL");
+define('Bb_ACCESS_KEY', 'BLACKBAUD_ACCESS_KEY');
+define('Bb_CLIENT_ID', 'BLACKBAUD_CLIENT_ID');
+define('Bb_CLIENT_SECRET', 'BLACKBAUD_CLIENT_SECRET');
+define('Bb_REDIRECT_URL', 'BLACKBAUD_REDIRECT_URL');
 
-define("Google_DELEGATED_ADMIN", "GOOGLE_DELEGATED_ADMIN");
-define("Google_CREDENTIALS", "GOOGLE_CREDENTIALS");
+define('Google_DELEGATED_ADMIN', 'GOOGLE_DELEGATED_ADMIN');
+define('Google_CREDENTIALS', 'GOOGLE_CREDENTIALS');
 
 // keys
-define("Bb_TOKEN", "blackbaud_token");
-define("OAuth2_STATE", "oauth2_state");
+define('Bb_TOKEN', 'blackbaud_token');
+define('OAuth2_STATE', 'oauth2_state');
 
 // OAuth 2 terms
-define("CODE", "code");
-define("STATE", "state");
-define("AUTHORIZATION_CODE", "authorization_code");
-define("REFRESH_TOKEN", "refresh_token");
+define('CODE', 'code');
+define('STATE', 'state');
+define('AUTHORIZATION_CODE', 'authorization_code');
+define('REFRESH_TOKEN', 'refresh_token');
 
 // TODO implement logging and/or notifications
 
@@ -50,9 +50,11 @@ function dump($m, $name = false)
     if ($name) {
         echo "<h5>$name</h5>";
     }
+    /*
     echo "<pre>";
     var_dump($m);
     echo "</pre>";
+    */
 }
 
 try {
@@ -62,9 +64,9 @@ try {
     // Blackbaud OAuth2 client
     $sky = new BlackbaudSKY([
         BlackbaudSKY::ACCESS_KEY => Secrets::get(Bb_ACCESS_KEY),
-        "clientId" => Secrets::get(Bb_CLIENT_ID),
-        "clientSecret" => Secrets::get(Bb_CLIENT_SECRET),
-        "redirectUri" => Secrets::get(Bb_REDIRECT_URL),
+        'clientId' => Secrets::get(Bb_CLIENT_ID),
+        'clientSecret' => Secrets::get(Bb_CLIENT_SECRET),
+        'redirectUri' => Secrets::get(Bb_REDIRECT_URL),
     ]);
 
     // acquire a Bb SKY API access token
@@ -76,7 +78,7 @@ try {
             $authorizationUrl = $sky->getAuthorizationUrl();
             $_SESSION[OAuth2_STATE] = $sky->getState();
             $cache->set(Bb_TOKEN, null);
-            header("Location: " . $authorizationUrl);
+            header('Location: ' . $authorizationUrl);
             exit();
         } elseif (
             empty($_GET[STATE]) ||
@@ -87,7 +89,7 @@ try {
                 unset($_SESSION[OAuth2_STATE]);
             }
 
-            exit("Invalid state");
+            exit('Invalid state');
         } else {
             $token = $sky->getAccessToken(AUTHORIZATION_CODE, [
                 CODE => $_GET[CODE],
@@ -95,7 +97,7 @@ try {
             $cache->set(Bb_TOKEN, $token);
         }
     } elseif ($token->hasExpired()) {
-        step("refresh Bb access token");
+        step('refresh Bb access token');
         dump($token);
         // use refresh token to get new Bb access token
         $newToken = $sky->getAccessToken(REFRESH_TOKEN, [
@@ -113,35 +115,35 @@ try {
     $google->setAuthConfig(json_decode(Secrets::get(Google_CREDENTIALS), true));
     $google->setSubject(Secrets::get(Google_DELEGATED_ADMIN));
     $google->setScopes([
-        "https://www.googleapis.com/auth/admin.directory.group",
+        'https://www.googleapis.com/auth/admin.directory.group',
     ]);
-    $google->setAccessType("offline");
+    $google->setAccessType('offline');
 
     $directory = new Directory($google);
 
-    $school = $school = $sky->endpoint("school/v1");
+    $school = $school = $sky->endpoint('school/v1');
 
-    step("api clients configured");
+    step('api clients configured');
 
-    $lists = $school->get("lists");
+    $lists = $school->get('lists');
 
-    foreach ($lists["value"] as $list) {
-        if ($list["category"] === APP_NAME) {
+    foreach ($lists['value'] as $list) {
+        if ($list['category'] === APP_NAME) {
             $bbGroup = new Group($list);
             step($bbGroup->getName());
-            dump($bbGroup, "bbGroup");
-            $response = $school->get("lists/advanced/{$list["id"]}");
+            dump($bbGroup, 'bbGroup');
+            $response = $school->get("lists/advanced/{$list['id']}");
             // TODO deal with pagination (1000 rows per page, probably not an immediate huge deal)
             /** @var Member[] */
             $bbMembers = [];
-            foreach ($response["results"]["rows"] as $data) {
+            foreach ($response['results']['rows'] as $data) {
                 $member = new Member($data);
-                dump($member, "member");
+                dump($member, 'member');
                 $bbMembers[$member->getEmail()] = $member;
             }
-            dump($bbMembers, "bbMembers");
+            dump($bbMembers, 'bbMembers');
 
-            step("compare to Google membership");
+            step('compare to Google membership');
             // TODO need to test for existence of Google Group and create if not present
             // TODO should have a param that determines if Google Groups are created if not found
             $purge = [];
@@ -149,26 +151,26 @@ try {
                 $directory->members->listMembers($bbGroup->getParamEmail())
                 as $gMember
             ) {
-                dump($gMember, "gMember");
+                dump($gMember, 'gMember');
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
                 if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                     unset($bbMembers[$gMember->getEmail()]);
                 } else {
                     if (
-                        $gMember->getRole() !== "OWNER" ||
+                        $gMember->getRole() !== 'OWNER' ||
                         ($bbGroup->getParamDangerouslyPurgeGoogleGroupOwners() &&
-                            $gMember->getRole() === "OWNER")
+                            $gMember->getRole() === 'OWNER')
                     ) {
                         array_push($purge, $gMember);
                     }
                 }
             }
-            dump($purge, "purge");
-            dump($bbMembers, "bbMembers");
-            step("purge members not present in Bb group");
+            dump($purge, 'purge');
+            dump($bbMembers, 'bbMembers');
+            step('purge members not present in Bb group');
             foreach ($purge as $gMember) {
-                step("purge " . $gMember->getEmail());
+                step('purge ' . $gMember->getEmail());
                 dump(
                     $directory->members->delete(
                         $bbGroup->getParamEmail(),
@@ -176,34 +178,34 @@ try {
                     )
                 );
             }
-            step("add members not present in Google group");
+            step('add members not present in Google group');
             foreach ($bbMembers as $bbMember) {
-                step("add " . $bbMember->getEmail());
+                step('add ' . $bbMember->getEmail());
                 dump(
                     $directory->members->insert(
                         $bbGroup->getParamEmail(),
                         new DirectoryMember([
-                            "email" => $bbMember->getEmail(),
+                            'email' => $bbMember->getEmail(),
                         ])
                     )
                 );
             }
 
-            step("update name");
-            dump($bbGroup->getParamUpdateName(), "update-name");
+            step('update name');
+            dump($bbGroup->getParamUpdateName(), 'update-name');
             if ($bbGroup->getParamUpdateName()) {
                 $gGroup = $directory->groups->get($bbGroup->getParamEmail());
                 if ($gGroup->getName() != $bbGroup->getName()) {
                     $gGroup->setName($bbGroup->getName());
-                    dump($gGroup, "gGroup");
+                    dump($gGroup, 'gGroup');
                     dump($directory->groups->update($gGroup->getId(), $gGroup));
                 }
             }
         }
     }
-    step("complete");
+    step('complete');
 } catch (Exception $e) {
-    step("EXCEPTION");
+    step('EXCEPTION');
     dump($e->getMessage());
     dump($e->getTraceAsString());
 }
