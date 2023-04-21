@@ -19,8 +19,8 @@
   "devDependencies": {
     "@battis/eslint-config": "github:battis/eslint-config",
     "@battis/prettier-config": "github:battis/prettier-config",
-    "@battis/webpack-typescript-spa": "github:battis/webpack-typescript-spa",
-    "rimraf": "^4.1.2"
+    "@battis/webpack": "github:battis/webpack",
+    "rimraf": "^4.4.1"
   },
   "prettier": "@battis/prettier-config",
   "eslintConfig": {

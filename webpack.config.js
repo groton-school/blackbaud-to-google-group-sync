@@ -1,4 +1,4 @@
-const config = require('@battis/webpack-typescript-spa');
+const config = require('@battis/webpack/ts/spa');
 
 module.exports = config({
   root: __dirname,
