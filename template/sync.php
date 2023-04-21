@@ -47,6 +47,7 @@ $logger->pushHandler($syslog);
 
 $syncId = substr(md5(time()), 0, 6);
 $logger->log(Level::Info, "start sync [$syncId]");
+$message = 'unknown failure';
 
 try {
     // connect to Memcached for cached tokens
@@ -210,9 +211,28 @@ try {
         }
     }
     $logger->log(Level::Info, "end sync [$syncId]");
+    $message = 'Sync complete';
 } catch (Exception $e) {
     $log->logger(
         Level::Info,
         "{$e->getMessage()} [$syncId]" . PHP_EOL . $e->getTraceAsString()
     );
+    $message = $e->getMessage();
 }
+?>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Blackbaud to Google Group Sync</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Blackbaud to Google Group Sync</h1>
+            <p><?= $message ?></p>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
