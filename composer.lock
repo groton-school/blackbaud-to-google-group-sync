@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7ab970072b635bf09dfc0ff49b41640",
+    "content-hash": "d95a0fb3c40b5f1fa0b6d841a57ddef3",
     "packages": [
         {
             "name": "battis/lazy-secrets",
@@ -2014,8 +2014,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-memcached": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-memcached": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

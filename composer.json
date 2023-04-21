@@ -2,13 +2,14 @@
   "name": "groton/blackbaud-to-google-group-sync",
   "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
   "require": {
-    "ext-memcached": "*",
     "ext-curl": "*",
+    "ext-memcached": "*",
     "battis/lazy-secrets": "^0.1",
     "google/apiclient": "^2.12",
     "google/appengine-php-sdk": "^2.1",
     "google/cloud-secret-manager": "^1.9",
-    "groton-school/oauth2-blackbaudsky": "^0.2"
+    "groton-school/oauth2-blackbaudsky": "^0.2",
+    "monolog/monolog": "^3.3"
   },
   "license": "GPL-3.0",
   "authors": [

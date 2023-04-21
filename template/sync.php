@@ -9,6 +9,9 @@ use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Group;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
 use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
 use League\OAuth2\Client\Token\AccessToken;
+use Monolog\Handler\SyslogHandler;
+use Monolog\Level;
+use Monolog\Logger;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -38,24 +41,12 @@ define('STATE', 'state');
 define('AUTHORIZATION_CODE', 'authorization_code');
 define('REFRESH_TOKEN', 'refresh_token');
 
-// TODO implement logging and/or notifications
+$logger = new Logger('blackbayd-to-google-group-sync');
+$syslog = new SyslogHandler('sync', LOG_USER, Level::Debug);
+$logger->pushHandler($syslog);
 
-function step($m)
-{
-    echo "<h3>$m</h3>";
-}
-
-function dump($m, $name = false)
-{
-    if ($name) {
-        echo "<h5>$name</h5>";
-    }
-    /*
-    echo "<pre>";
-    var_dump($m);
-    echo "</pre>";
-    */
-}
+$syncId = substr(md5(time()), 0, 6);
+$logger->log(Level::Info, "start sync [$syncId]");
 
 try {
     // connect to Memcached for cached tokens
@@ -97,8 +88,6 @@ try {
             $cache->set(Bb_TOKEN, $token);
         }
     } elseif ($token->hasExpired()) {
-        step('refresh Bb access token');
-        dump($token);
         // use refresh token to get new Bb access token
         $newToken = $sky->getAccessToken(REFRESH_TOKEN, [
             REFRESH_TOKEN => $token->getRefreshToken(),
@@ -123,35 +112,52 @@ try {
 
     $school = $school = $sky->endpoint('school/v1');
 
-    step('api clients configured');
-
     $lists = $school->get('lists');
 
     foreach ($lists['value'] as $list) {
         if ($list['category'] === APP_NAME) {
             $bbGroup = new Group($list);
-            step($bbGroup->getName());
-            dump($bbGroup, 'bbGroup');
+            $logger->log(
+                Level::Info,
+                "Blackbaud group '{$bbGroup->getName()}' [$syncId]"
+            );
             $response = $school->get("lists/advanced/{$list['id']}");
             // TODO deal with pagination (1000 rows per page, probably not an immediate huge deal)
             /** @var Member[] */
             $bbMembers = [];
             foreach ($response['results']['rows'] as $data) {
-                $member = new Member($data);
-                dump($member, 'member');
-                $bbMembers[$member->getEmail()] = $member;
+                try {
+                    $member = new Member($data);
+                    $bbMembers[$member->getEmail()] = $member;
+                } catch (Exception $e) {
+                    $logger->log(
+                        Level::Warning,
+                        "{$e->getMessage()} [$syncId]" .
+                            PHP_EOL .
+                            json_encode($data, JSON_PRETTY_PRINT)
+                    );
+                }
             }
-            dump($bbMembers, 'bbMembers');
+            $logger->log(
+                Level::Info,
+                count($bbMembers) . " members in Blackbaud [$syncId]"
+            );
 
-            step('compare to Google membership');
             // TODO need to test for existence of Google Group and create if not present
             // TODO should have a param that determines if Google Groups are created if not found
             $purge = [];
-            foreach (
-                $directory->members->listMembers($bbGroup->getParamEmail())
-                as $gMember
-            ) {
-                dump($gMember, 'gMember');
+            $gGroup = $directory->members->listMembers(
+                $bbGroup->getParamEmail()
+            );
+            $logger->log(
+                Level::Info,
+                "'Google group '{$bbGroup->getParamEmail()}' [$syncId]"
+            );
+            $logger->log(
+                Level::Info,
+                count($gGroup) . " members in Google [$syncId]"
+            );
+            foreach ($gGroup as $gMember) {
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
                 if (array_key_exists($gMember->getEmail(), $bbMembers)) {
@@ -166,46 +172,47 @@ try {
                     }
                 }
             }
-            dump($purge, 'purge');
-            dump($bbMembers, 'bbMembers');
-            step('purge members not present in Bb group');
             foreach ($purge as $gMember) {
-                step('purge ' . $gMember->getEmail());
-                dump(
-                    $directory->members->delete(
-                        $bbGroup->getParamEmail(),
-                        $gMember->getEmail()
-                    )
+                $logger->log(
+                    Level::Info,
+                    "delete '{$gMember->getEmail()}' [$syncId]"
                 );
-            }
-            step('add members not present in Google group');
-            foreach ($bbMembers as $bbMember) {
-                step('add ' . $bbMember->getEmail());
-                dump(
-                    $directory->members->insert(
-                        $bbGroup->getParamEmail(),
-                        new DirectoryMember([
-                            'email' => $bbMember->getEmail(),
-                        ])
-                    )
+                $directory->members->delete(
+                    $bbGroup->getParamEmail(),
+                    $gMember->getEmail()
                 );
             }
 
-            step('update name');
-            dump($bbGroup->getParamUpdateName(), 'update-name');
+            foreach ($bbMembers as $bbMember) {
+                $logger->log(
+                    Level::Info,
+                    "add '{$bbMember->getEmail()}' [$syncId]"
+                );
+                $directory->members->insert(
+                    $bbGroup->getParamEmail(),
+                    new DirectoryMember([
+                        'email' => $bbMember->getEmail(),
+                    ])
+                );
+            }
+
             if ($bbGroup->getParamUpdateName()) {
                 $gGroup = $directory->groups->get($bbGroup->getParamEmail());
                 if ($gGroup->getName() != $bbGroup->getName()) {
+                    $logger->log(
+                        Level::Info,
+                        "group name change to '{$bbGroup->getName()}' [$syncId]"
+                    );
                     $gGroup->setName($bbGroup->getName());
-                    dump($gGroup, 'gGroup');
-                    dump($directory->groups->update($gGroup->getId(), $gGroup));
+                    $directory->groups->update($gGroup->getId(), $gGroup);
                 }
             }
         }
     }
-    step('complete');
+    $logger->log(Level::Info, "end sync [$syncId]");
 } catch (Exception $e) {
-    step('EXCEPTION');
-    dump($e->getMessage());
-    dump($e->getTraceAsString());
+    $log->logger(
+        Level::Info,
+        "{$e->getMessage()} [$syncId]" . PHP_EOL . $e->getTraceAsString()
+    );
 }
