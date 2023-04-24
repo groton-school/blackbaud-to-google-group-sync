@@ -41,12 +41,12 @@ define('STATE', 'state');
 define('AUTHORIZATION_CODE', 'authorization_code');
 define('REFRESH_TOKEN', 'refresh_token');
 
-$logger = new Logger('blackbayd-to-google-group-sync');
+$logger = new Logger('blackbaud-to-google-group-sync');
 $syslog = new SyslogHandler('sync', LOG_USER, Level::Debug);
 $logger->pushHandler($syslog);
 
 $syncId = substr(md5(time()), 0, 6);
-$logger->log(Level::Info, "start sync [$syncId]");
+$logger->log(Level::Info, 'start', ['sync' => $syncId]);
 $message = 'unknown failure';
 
 try {
@@ -118,10 +118,6 @@ try {
     foreach ($lists['value'] as $list) {
         if ($list['category'] === APP_NAME) {
             $bbGroup = new Group($list);
-            $logger->log(
-                Level::Info,
-                "Blackbaud group '{$bbGroup->getName()}' [$syncId]"
-            );
             $response = $school->get("lists/advanced/{$list['id']}");
             // TODO deal with pagination (1000 rows per page, probably not an immediate huge deal)
             /** @var Member[] */
@@ -131,18 +127,22 @@ try {
                     $member = new Member($data);
                     $bbMembers[$member->getEmail()] = $member;
                 } catch (Exception $e) {
-                    $logger->log(
-                        Level::Warning,
-                        "{$e->getMessage()} [$syncId]" .
-                            PHP_EOL .
-                            json_encode($data, JSON_PRETTY_PRINT)
-                    );
+                    $logger->log(Level::Warning, $e->getMessage(), [
+                        'sync' => $syncId,
+                        'code' => $e->getCode(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => $e->getTraceAsString(),
+                        'data' => $data,
+                    ]);
                 }
             }
-            $logger->log(
-                Level::Info,
-                count($bbMembers) . " members in Blackbaud [$syncId]"
-            );
+            $logger->log(Level::Info, 'blackbaud info', [
+                'sync' => $syncId,
+                'id' => $bbGroup->getId(),
+                'name' => $bbGroup->getName(),
+                'count' => count($bbMembers),
+            ]);
 
             // TODO need to test for existence of Google Group and create if not present
             // TODO should have a param that determines if Google Groups are created if not found
@@ -150,14 +150,12 @@ try {
             $gGroup = $directory->members->listMembers(
                 $bbGroup->getParamEmail()
             );
-            $logger->log(
-                Level::Info,
-                "'Google group '{$bbGroup->getParamEmail()}' [$syncId]"
-            );
-            $logger->log(
-                Level::Info,
-                count($gGroup) . " members in Google [$syncId]"
-            );
+            $logger->log(Level::Info, 'google info', [
+                'sync' => $syncId,
+                'blackbaud-id' => $bbGroup->getId(),
+                'email' => $bbGroup->getParamEmail(),
+                'count' => count($gGroup),
+            ]);
             foreach ($gGroup as $gMember) {
                 /** @var DirectoryMember $gMember */
                 /** @var DirectoryMember[] */
@@ -174,10 +172,11 @@ try {
                 }
             }
             foreach ($purge as $gMember) {
-                $logger->log(
-                    Level::Info,
-                    "delete '{$gMember->getEmail()}' [$syncId]"
-                );
+                $logger->log(Level::Info, "delete '{$gMember->getEmail()}'", [
+                    'sync' => $syncId,
+                    'blackbaud-id' => $bbGroup->getId(),
+                    'google-email' => $bbGroup->getParamEmail(),
+                ]);
                 $directory->members->delete(
                     $bbGroup->getParamEmail(),
                     $gMember->getEmail()
@@ -185,16 +184,29 @@ try {
             }
 
             foreach ($bbMembers as $bbMember) {
-                $logger->log(
-                    Level::Info,
-                    "add '{$bbMember->getEmail()}' [$syncId]"
-                );
-                $directory->members->insert(
-                    $bbGroup->getParamEmail(),
-                    new DirectoryMember([
-                        'email' => $bbMember->getEmail(),
-                    ])
-                );
+                try {
+                    $logger->log(Level::Info, "add '{$bbMember->getEmail()}'", [
+                        'sync' => $syncId,
+                        'blackbaud-id' => $bbGroup->getId(),
+                        'google-email' => $bbGroup->getParamEmail(),
+                    ]);
+                    $directory->members->insert(
+                        $bbGroup->getParamEmail(),
+                        new DirectoryMember([
+                            'email' => $bbMember->getEmail(),
+                        ])
+                    );
+                } catch (Exception $e) {
+                    $logger->log(Level::Error, $e->getMessage(), [
+                        'sync' => $syncId,
+                        'blackbaud-id' => $bbGroup->getId(),
+                        'google-email' => $bbGroup->getParamEmail(),
+                        'code' => $e->getCode(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => $e->getTraceAsString(),
+                    ]);
+                }
             }
 
             if ($bbGroup->getParamUpdateName()) {
@@ -202,7 +214,12 @@ try {
                 if ($gGroup->getName() != $bbGroup->getName()) {
                     $logger->log(
                         Level::Info,
-                        "group name change to '{$bbGroup->getName()}' [$syncId]"
+                        "group name change to '{$bbGroup->getName()}'",
+                        [
+                            'sync' => $syncId,
+                            'blackbaud-id' => $bbGroup->getId(),
+                            'google-email' => $bbGroup->getParamEmail(),
+                        ]
                     );
                     $gGroup->setName($bbGroup->getName());
                     $directory->groups->update($gGroup->getId(), $gGroup);
@@ -210,12 +227,12 @@ try {
             }
         }
     }
-    $logger->log(Level::Info, "end sync [$syncId]");
-    $message = 'Sync complete';
+    $message = 'end';
+    $logger->log(Level::Info, $message, ['sync' => $syncId]);
 } catch (Exception $e) {
-    $log->logger(
+    $logger->log(
         Level::Info,
-        "{$e->getMessage()} [$syncId]" . PHP_EOL . $e->getTraceAsString()
+        "{$e->getMessage()}" . PHP_EOL . $e->getTraceAsString()
     );
     $message = $e->getMessage();
 }

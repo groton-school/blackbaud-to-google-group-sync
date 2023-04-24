@@ -16,9 +16,10 @@ class Group
 
     public function __construct(array $data)
     {
-        $this->name = $data["name"];
+        $this->id = $data['id'];
+        $this->name = $data['name'];
         $this->data = $data;
-        if (preg_match("/(\{.*\})/", $data["description"], $matches)) {
+        if (preg_match('/(\{.*\})/', $data['description'], $matches)) {
             $this->params = json_decode($matches[1], true);
         }
     }
@@ -52,16 +53,16 @@ class Group
      */
     public function getParamEmail(): string
     {
-        return $this->getParam("email", new Exception("no email configured"));
+        return $this->getParam('email', new Exception('no email configured'));
     }
 
     public function getParamUpdateName(): bool
     {
-        return $this->getParam("update-name", true);
+        return $this->getParam('update-name', true);
     }
 
     public function getParamDangerouslyPurgeGoogleGroupOwners(): bool
     {
-        return $this->getParam("dangerously-purge-google-group-owners", false);
+        return $this->getParam('dangerously-purge-google-group-owners', false);
     }
 }
