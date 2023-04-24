@@ -197,15 +197,22 @@ try {
                         ])
                     );
                 } catch (Exception $e) {
-                    $logger->log(Level::Error, $e->getMessage(), [
-                        'sync' => $syncId,
-                        'blackbaud-id' => $bbGroup->getId(),
-                        'google-email' => $bbGroup->getParamEmail(),
-                        'code' => $e->getCode(),
-                        'file' => $e->getFile(),
-                        'line' => $e->getLine(),
-                        'trace' => $e->getTraceAsString(),
-                    ]);
+                    $logger->log(
+                        Level::Error,
+                        json_encode(
+                            json_decode($e->getMessage(), true),
+                            JSON_PRETTY_PRINT
+                        ),
+                        [
+                            'sync' => $syncId,
+                            'blackbaud-id' => $bbGroup->getId(),
+                            'google-email' => $bbGroup->getParamEmail(),
+                            'code' => $e->getCode(),
+                            'file' => $e->getFile(),
+                            'line' => $e->getLine(),
+                            'trace' => $e->getTraceAsString(),
+                        ]
+                    );
                 }
             }
 

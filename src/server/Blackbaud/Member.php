@@ -18,7 +18,7 @@ class Member
             switch ($col['name']) {
                 case 'E-Mail':
                     if (key_exists('value', $col) && !empty($col['value'])) {
-                        $this->email = $col['value'];
+                        $this->email = strtolower($col['value']);
                         $email = true;
                     }
                     break;
