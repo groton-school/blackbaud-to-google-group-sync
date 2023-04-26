@@ -167,7 +167,7 @@ try {
         $progress->removeChild($bbProgress);
         $progress->increment();
     }
-    $message = 'end';
+    $message = 'complete';
 } catch (Exception $e) {
     $progress->exception($e);
     $message = $e->getMessage();
