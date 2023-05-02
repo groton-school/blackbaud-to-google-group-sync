@@ -6,6 +6,7 @@ use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Group;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\SKY;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Google\Google;
+use GrotonSchool\BlackbaudToGoogleGroupSync\Sync\Async;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Sync\Progress;
 use Monolog\Level;
 
@@ -18,24 +19,20 @@ define('APP_NAME', 'Blackbaud to Google Group Sync');
 $progress = new Progress();
 $progress->setContext(['sync' => $progress->getId()]);
 try {
-    $message = 'unknown failure';
-    $token = SKY::getToken($_SERVER, $_SESSION, $_GET);
     $progress->setStatus('start');
-    $content = json_encode([
-        'id' => $progress->getId(),
-        'message' => 'Sync started',
-        'status' =>
-            'https://' .
-            $_SERVER['HTTP_HOST'] .
-            '/progress?id=' .
-            $progress->getId(),
-    ]);
-    ignore_user_abort(true);
-    header('Content-Type: application/json');
-    header('Content-Length: ' . strlen($content));
-    header('Connection: close');
-    echo $content;
-    flush();
+    $token = SKY::getToken($_SERVER, $_SESSION, $_GET);
+
+    Async::start(function () use ($progress) {
+        echo json_encode([
+            'id' => $progress->getId(),
+            'message' => 'Sync started',
+            'status' =>
+                'https://' .
+                $_SERVER['HTTP_HOST'] .
+                '/progress?id=' .
+                $progress->getId(),
+        ]);
+    });
 
     Google::init(APP_NAME);
     $directory = new Directory(Google::api());
@@ -167,9 +164,7 @@ try {
         $progress->removeChild($bbProgress);
         $progress->increment();
     }
-    $message = 'complete';
+    Async::result(fn() => $progress->setStatus('complete'));
 } catch (Exception $e) {
-    $progress->exception($e);
-    $message = $e->getMessage();
+    Async::error(fn() => $progress->exception($e));
 }
-$progress->setStatus($message);
