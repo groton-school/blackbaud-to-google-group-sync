@@ -32,7 +32,7 @@ class Google
             self::$api = new Client();
             self::$api->setApplicationName(self::$appName);
             self::$api->setAuthConfig(
-                json_decode(Secrets::get(self::Google_CREDENTIALS), true)
+                Secrets::get(self::Google_CREDENTIALS, true)
             );
             self::$api->setSubject(Secrets::get(self::Google_DELEGATED_ADMIN));
             self::$api->setScopes([

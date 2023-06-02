@@ -2,11 +2,11 @@
   "actions" : {
     "build" : {
       "enabled" : true,
-      "script" : "npm run clean\nnpm run build"
+      "script" : "npm run build"
     },
     "run" : {
       "enabled" : true,
-      "script" : "npm run clean\nnpm run build\nnpm run deploy"
+      "script" : "npm run build\nnpm run deploy"
     }
   },
   "openLogOnRun" : "start"

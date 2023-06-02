@@ -4,10 +4,9 @@
   "require": {
     "ext-curl": "*",
     "ext-memcached": "*",
-    "battis/lazy-secrets": "^0.1",
     "google/apiclient": "^2.12",
     "google/appengine-php-sdk": "^2.1",
-    "google/cloud-secret-manager": "^1.9",
+    "battis/lazy-secrets": "^0.2",
     "groton-school/oauth2-blackbaudsky": "^0.2",
     "monolog/monolog": "^3.3"
   },

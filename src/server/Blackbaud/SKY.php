@@ -2,9 +2,9 @@
 
 namespace GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud;
 
-use Battis\LazySecrets\Secrets;
 use Exception;
 use Google\AppEngine\Api\Memcache\Memcached;
+use Battis\LazySecrets\Secrets;
 use League\OAuth2\Client\Token\AccessToken;
 use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
 
@@ -15,9 +15,9 @@ class SKY
     const Bb_CLIENT_ID = 'BLACKBAUD_CLIENT_ID';
     const Bb_CLIENT_SECRET = 'BLACKBAUD_CLIENT_SECRET';
     const Bb_REDIRECT_URL = 'BLACKBAUD_REDIRECT_URL';
+    const Bb_TOKEN = 'BLACKBAUD_API_TOKEN';
 
     // keys
-    const Bb_TOKEN = 'blackbaud_token';
     const OAuth2_STATE = 'oauth2_state';
     const Request_URI = 'request_uri';
 
@@ -51,44 +51,59 @@ class SKY
         return self::$cache;
     }
 
-    public static function getToken($server, $session, $get)
-    {
-        // Blackbaud OAuth2 client
-
+    public static function getToken(
+        $server,
+        $session,
+        $get,
+        $interactive = true
+    ) {
+        $token = new AccessToken(Secrets::get(self::Bb_TOKEN, true));
         // acquire a Bb SKY API access token
         /** @var AccessToken|null $token **/
-        $token = self::cache()->get(self::Bb_TOKEN);
         if (empty($token)) {
-            // interactively acquire a new Bb access token
-            if (false === isset($get[self::CODE])) {
-                $authorizationUrl = self::api()->getAuthorizationUrl();
-                $session[self::OAuth2_STATE] = self::api()->getState();
-                self::cache()->set(self::Bb_TOKEN, null);
-                self::cache()->set(self::Request_URI, $server['REQUEST_URI']);
-                header("Location: $authorizationUrl");
-                exit();
-            } elseif (
-                empty($get[self::STATE]) ||
-                (isset($session[self::OAuth2_STATE]) &&
-                    $get[self::STATE] !== $session[self::OAuth2_STATE])
-            ) {
-                if (isset($session[self::OAuth2_STATE])) {
-                    unset($session[self::OAuth2_STATE]);
-                }
+            if ($interactive) {
+                // interactively acquire a new Bb access token
+                if (false === isset($get[self::CODE])) {
+                    $authorizationUrl = self::api()->getAuthorizationUrl();
+                    $session[self::OAuth2_STATE] = self::api()->getState();
+                    // TODO wipe existing token?
+                    self::cache()->set(
+                        self::Request_URI,
+                        $server['REQUEST_URI']
+                    );
+                    header("Location: $authorizationUrl");
+                    exit();
+                } elseif (
+                    empty($get[self::STATE]) ||
+                    (isset($session[self::OAuth2_STATE]) &&
+                        $get[self::STATE] !== $session[self::OAuth2_STATE])
+                ) {
+                    if (isset($session[self::OAuth2_STATE])) {
+                        unset($session[self::OAuth2_STATE]);
+                    }
 
-                throw new Exception(json_encode(['error' => 'invalid state']));
+                    throw new Exception(
+                        json_encode(['error' => 'invalid state'])
+                    );
+                } else {
+                    $token = self::api()->getAccessToken(
+                        self::AUTHORIZATION_CODE,
+                        [
+                            self::CODE => $get[self::CODE],
+                        ]
+                    );
+                    Secrets::set(self::Bb_TOKEN, $token);
+                }
             } else {
-                $token = self::api()->getAccessToken(self::AUTHORIZATION_CODE, [
-                    self::CODE => $get[self::CODE],
-                ]);
-                self::cache()->set(self::Bb_TOKEN, $token);
+                return null;
             }
         } elseif ($token->hasExpired()) {
             // use refresh token to get new Bb access token
-            $newToken = self::$api->getAccessToken(self::REFRESH_TOKEN, [
+            $newToken = self::api()->getAccessToken(self::REFRESH_TOKEN, [
                 self::REFRESH_TOKEN => $token->getRefreshToken(),
             ]);
-            self::cache()->set(self::Bb_TOKEN, $newToken);
+            // FIXME need to handle _not_ being able to refresh!
+            Secrets::set(self::Bb_TOKEN, $newToken);
             $token = $newToken;
         } else {
             self::api()->setAccessToken($token);

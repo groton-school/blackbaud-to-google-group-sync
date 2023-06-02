@@ -5,5 +5,5 @@ module.exports = config({
   appName: 'Blackbaud to Google Groups Sync',
   entry: './src/client/index.ts',
   template: 'template',
-  build: 'public',
+  build: 'public'
 });

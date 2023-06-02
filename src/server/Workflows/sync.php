@@ -10,7 +10,7 @@ use GrotonSchool\BlackbaudToGoogleGroupSync\Sync\Async;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Sync\Progress;
 use Monolog\Level;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
 session_start();
 

@@ -1,13 +1,4 @@
-const content = document.querySelector('#content');
-content &&
-  (content.innerHTML = `
-<h1>Blackbaud to Google Groups Sync</h1>
-<ul>
-    <li>
-        <a href="sync">Sync</a>
-    </li>
-    <li>
-        <a href="clear-cache">Clear Cache</a>
-    </li>
-</ul>
-`);
+import * as Options from './Options';
+import Sync from './Sync';
+
+Options.add({ title: 'Start Sync', handler: Sync, primary: true });
