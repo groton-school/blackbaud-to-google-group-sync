@@ -58,11 +58,14 @@ try {
                 $progress->exception($e, ['data' => $data], Level::Warning);
             }
         }
-        $progress->setStatus('Parsed Blackbaud group information', [
-            'blackbaud-id' => $bbGroup->getId(),
-            'name' => $bbGroup->getName(),
-            'count' => count($bbMembers),
-        ]);
+        $progress->setStatus(
+            $bbGroup->getName() . ': Parsed Blackbaud group information',
+            [
+                'blackbaud-id' => $bbGroup->getId(),
+                'name' => $bbGroup->getName(),
+                'count' => count($bbMembers),
+            ]
+        );
         $bbProgress = new Progress([
             'name' => 'Blackbaud',
             'status' => $bbGroup->getName(),
@@ -76,11 +79,14 @@ try {
 
         $purge = [];
         $gGroup = $directory->members->listMembers($bbGroup->getParamEmail());
-        $progress->setStatus('Parsed Google group information', [
-            'blackbaud-id' => $bbGroup->getId(),
-            'email' => $bbGroup->getParamEmail(),
-            'count' => count($gGroup),
-        ]);
+        $progress->setStatus(
+            $bbGroup->getName() . ': Parsed Google group information',
+            [
+                'blackbaud-id' => $bbGroup->getId(),
+                'email' => $bbGroup->getParamEmail(),
+                'count' => count($gGroup),
+            ]
+        );
         $gProgress = new Progress([
             'name' => 'Google',
             'max' => count($gGroup),

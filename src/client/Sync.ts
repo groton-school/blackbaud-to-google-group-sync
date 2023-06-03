@@ -8,6 +8,8 @@ export default function Sync() {
         fetch(`${process.env.URL}/sync`)
           .then((response) => response.json())
           .then(Progress.display);
+      } else {
+        // FIXME open new window to do interactive authentication
       }
     });
 }

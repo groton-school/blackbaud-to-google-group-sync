@@ -1,3 +1,4 @@
+import * as Messages from '../Messages';
 import './styles.scss';
 
 type SyncResponse = {
@@ -17,16 +18,31 @@ type ProgressResponse = {
 
 const container = document.querySelector('#progress') as HTMLDivElement;
 const progressBars: { [id: ProgressId]: HTMLDivElement } = {};
+let spinner: HTMLDivElement;
 
-export const display = ({ status }: SyncResponse) => poll(status);
+export function display({ status }: SyncResponse) {
+  spinner = document.createElement('div');
+  spinner.className = 'progress';
+  spinner.role = 'progressbar';
+  const bar = document.createElement('div');
+  bar.className =
+    'progress-bar progress-bar-striped progress-bar-animated overflow-visible';
+  bar.style.width = '100%';
+  spinner.append(bar);
+  container.append(spinner);
+  poll(status);
+}
 
 function create({ id, children = {} }: ProgressResponse) {
   const elt: HTMLDivElement = document.createElement('div');
   elt.className = 'progress';
   id && (elt.id = id);
   elt.role = 'progressbar';
+  elt.ariaValueMin = '0';
   const bar: HTMLDivElement = document.createElement('div');
-  bar.className = 'progress-bar overflow-visible';
+  bar.className =
+    'progress-bar progress-bar-striped progress-bar-animated overflow-visible';
+  bar.style.width = '100%';
   elt.append(bar);
   id && (progressBars[id] = elt);
   container.append(elt);
@@ -44,7 +60,6 @@ function update(progress: ProgressResponse) {
   elt.dataset.live = 'yes';
   max && (elt.ariaValueMax = max.toString());
   value !== undefined && (elt.ariaValueNow = value.toString());
-  (value !== undefined || max) && (elt.ariaValueMin = '0');
   value !== undefined &&
     max &&
     ((elt.firstElementChild as HTMLDivElement).style.width = `${(value * 100) / max
@@ -70,12 +85,23 @@ function prune() {
 }
 
 function poll(statusEndpoint: string, progress?: ProgressResponse) {
-  prep();
-  progress && update(progress);
-  prune();
+  if (progress) {
+    spinner?.remove();
+    prep();
+    update(progress);
+    prune();
+  }
   if ((progress === undefined || progress.status) !== 'complete') {
     fetch(statusEndpoint)
       .then((response) => response.json())
       .then((progress: ProgressResponse) => poll(statusEndpoint, progress));
+  } else {
+    Messages.add({
+      message: `<strong>Sync complete.</strong> ${Object.values(progressBars)[0].ariaValueMax
+        } groups synced from Blackbaud to Google at ${new Date().toLocaleString()}.`,
+      dismissable: true,
+      variant: 'success'
+    });
+    container.innerHTML = '';
   }
 }

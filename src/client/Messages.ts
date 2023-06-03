@@ -36,9 +36,11 @@ class Message {
     this.element.id = id || crypto.randomUUID();
     this.element.role = 'alert';
     if (dismissable) {
+      this.element.classList.add('alert-dismissible');
       const button = document.createElement('button') as HTMLButtonElement;
+      button.type = 'button';
       button.className = 'btn-close';
-      button.dataset.bsDismiss;
+      button.dataset.bsDismiss = 'alert';
       button.ariaLabel = 'Close';
       this.element.classList.add('alert-dismissable');
       this.element.append(button);
