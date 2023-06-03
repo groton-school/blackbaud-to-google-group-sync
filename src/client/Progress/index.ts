@@ -5,6 +5,7 @@ type SyncResponse = {
   id: string;
   message: string;
   status: string;
+  error?: string;
 };
 
 type ProgressId = string;
@@ -20,7 +21,15 @@ const container = document.querySelector('#progress') as HTMLDivElement;
 const progressBars: { [id: ProgressId]: HTMLDivElement } = {};
 let spinner: HTMLDivElement;
 
-export function display({ status }: SyncResponse) {
+export function display({ status, error }: SyncResponse) {
+  if (error) {
+    Messages.add({
+      message: `<strong>Error:</strong ${error}`,
+      dismissable: true,
+      variant: 'danger'
+    });
+    return;
+  }
   spinner = document.createElement('div');
   spinner.className = 'progress';
   spinner.role = 'progressbar';
