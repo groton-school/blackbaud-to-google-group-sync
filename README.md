@@ -10,8 +10,8 @@ The basic idea of this script is that it will perform a one-way sync of membersh
 
 1. Copy one of your [SKY API developer account subscription access keys](https://developer.blackbaud.com/subscriptions/) (this will be the Heroku `BLACKBAUD_ACCESS_KEY` environment variable)
 2. Go to your [Applications](https://developer.blackbaud.com/apps/), add a new application.
-    1. Give a dummy website URL for now (until the Heroku instance is standing)
-    2. Copy the OAuth client ID and secret (these will be the `BLACKBAUD_CLIENT_ID` and `BLACKBAUD_CLIENT_SECRET` Heroku environment variables, respectively.
+   1. Give a dummy website URL for now (until the Heroku instance is standing)
+   2. Copy the OAuth client ID and secret (these will be the `BLACKBAUD_CLIENT_ID` and `BLACKBAUD_CLIENT_SECRET` Heroku environment variables, respectively.
 3. [In the Blackbaud Marketplace](https://app.blackbaud.com/marketplace/manage) click the Connect App button and use the OAuth client ID as the Application ID to connect the app to your Blackbaud instance
 
 ...pause while you set up Google and Heroku...
@@ -24,15 +24,21 @@ The basic idea of this script is that it will perform a one-way sync of membersh
 1. In [Google Cloud](https://console.cloud.google.com/), create a new project
 2. Under [IAM & Admin](https://console.cloud.google.com/iam-admin/iam) add a Google Workspace admin user as a principal with `Owner` role. (This user's email will be the value for the Heroku `GOOGLE_DELEGATED_ADMIN` environment variable)
 3. In [APIs & Services](https://console.cloud.google.com/apis/dashboard)
-    1. Enable the `Admin SDK API`
-    2. Under [Credentials](https://console.cloud.google.com/apis/credentials), create a Service Account
-    3. Add a key to the Service Account and download the JSON credentials file (the contents of this file are value for the Heroku `GOOGLE_CREDENTIALS` environment variable)
+   1. Enable the `Admin SDK API`
+   2. Under [Credentials](https://console.cloud.google.com/apis/credentials), create a Service Account
+   3. Add a key to the Service Account and download the JSON credentials file (the contents of this file are value for the Heroku `GOOGLE_CREDENTIALS` environment variable)
 4. Copy the Unique ID of the Service Account (a 21-digit number)
 5. In Google Workspace Admin, go to Security/Access and data control/API controls and [Manage Domain Wide Delegation](https://admin.google.com/ac/owl/domainwidedelegation)
-    1. Add a new API client
-    2. The Client ID is the Service Account Unique ID
-    3. The OAuth scope is `https://www.googleapis.com/auth/admin.directory.group`
-    4. Authorize
+   1. Add a new API client
+   2. The Client ID is the Service Account Unique ID
+   3. The OAuth scope is `https://www.googleapis.com/auth/admin.directory.group`
+   4. Authorize
+
+#### Secret Manager setup
+
+#### IAP setup
+
+#### Cloud Scheduler setup
 
 #### Commentary
 
@@ -44,29 +50,29 @@ For example, an attempt by the service account to access users, rather than grou
 
 ```json
 {
-    "error": {
-        "code": 403,
-        "message": "Request had insufficient authentication scopes.",
-        "errors": [
-            {
-                "message": "Insufficient Permission",
-                "domain": "global",
-                "reason": "insufficientPermissions"
-            }
-        ],
-        "status": "PERMISSION_DENIED",
-        "details": [
-            {
-                "@type": "type.googleapis.com/google.rpc.ErrorInfo",
-                "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT",
-                "domain": "googleapis.com",
-                "metadata": {
-                    "service": "admin.googleapis.com",
-                    "method": "ccc.hosted.frontend.directory.v1.DirectoryUsers.List"
-                }
-            }
-        ]
-    }
+  "error": {
+    "code": 403,
+    "message": "Request had insufficient authentication scopes.",
+    "errors": [
+      {
+        "message": "Insufficient Permission",
+        "domain": "global",
+        "reason": "insufficientPermissions"
+      }
+    ],
+    "status": "PERMISSION_DENIED",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+        "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT",
+        "domain": "googleapis.com",
+        "metadata": {
+          "service": "admin.googleapis.com",
+          "method": "ccc.hosted.frontend.directory.v1.DirectoryUsers.List"
+        }
+      }
+    ]
+  }
 }
 ```
 
@@ -112,9 +118,9 @@ In configuring the advanced list, we need to pay attention to:
 1. The `Name` of the list -- this can be synced to the Google Group, allowing us to update the name of the Google Group from Blackbaud.
 2. The `Category` in which the list resides. As there are many advanced lists, we use this as a filter to determine which lists are relevant to the script. Currently, the script examines all lists in the `Blackbaud to Google Group Sync` category.
 3. The `Description` can be the usual free-form text, but _must_ also contain at at least one JSON-encoded parameter. At present, the only supported parameter is `email`, but additional paramters are planned:
-    - `email` a text value: the email address of the destination Google Group into which to sync this membership
-    - `update-name` is a boolean value, defaulting to `true`, that determines whether or not to update the name of the Google Group to match the name of the list (which is presumptively the name of the group too).
-    - `dangerously-purge-google-group-owners` is a boolean value, defaulting to `false`, that determines whether or not to pay attention to a Google Group member's ownership role when deciding to purge them from the group if they are not members of the Blackbaud community group.
+   - `email` a text value: the email address of the destination Google Group into which to sync this membership
+   - `update-name` is a boolean value, defaulting to `true`, that determines whether or not to update the name of the Google Group to match the name of the list (which is presumptively the name of the group too).
+   - `dangerously-purge-google-group-owners` is a boolean value, defaulting to `false`, that determines whether or not to pay attention to a Google Group member's ownership role when deciding to purge them from the group if they are not members of the Blackbaud community group.
 
 Generically, the list would display the following:
 
