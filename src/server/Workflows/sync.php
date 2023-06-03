@@ -83,7 +83,16 @@ try {
         ]);
 
         $purge = [];
-        $gGroup = $directory->members->listMembers($bbGroup->getParamEmail());
+        $gGroup = [];
+        $pageToken = null;
+        do {
+            $page = $directory->members->listMembers(
+                $bbGroup->getParamEmail(),
+                $pageToken ? ['pageToken' => $pageToken] : []
+            );
+            $pageToken = $page->getNextPageToken();
+            $gGroup = array_merge($gGroup, $page->getMembers());
+        } while ($pageToken);
         $gProgress = new Progress([
             'name' => 'Google',
             'max' => count($gGroup),
