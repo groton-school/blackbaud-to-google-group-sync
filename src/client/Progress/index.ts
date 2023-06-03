@@ -20,8 +20,13 @@ type ProgressResponse = {
 const container = document.querySelector('#progress') as HTMLDivElement;
 const progressBars: { [id: ProgressId]: HTMLDivElement } = {};
 let spinner: HTMLDivElement;
+let completionCallback: undefined | (() => void);
 
-export function display({ status, error }: SyncResponse) {
+export function display(
+  { status, error }: SyncResponse,
+  callback?: () => void
+) {
+  callback && (completionCallback = callback);
   if (error) {
     Messages.add({
       message: `<strong>Error:</strong ${error}`,
@@ -112,5 +117,9 @@ function poll(statusEndpoint: string, progress?: ProgressResponse) {
       variant: 'success'
     });
     container.innerHTML = '';
+    if (completionCallback) {
+      completionCallback();
+      completionCallback = undefined;
+    }
   }
 }

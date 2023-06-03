@@ -1,3 +1,5 @@
+import './styles.scss';
+
 type OptionID = string;
 
 type OptionParameters = {
@@ -6,43 +8,50 @@ type OptionParameters = {
   id?: OptionID;
   primary?: boolean;
   enabled?: boolean;
+  variant?:
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'light'
+  | 'dark'
+  | 'link';
 };
 
 const container = document.querySelector('#options') as HTMLElement;
 const options: OptionButton[] = [];
 
 class OptionButton {
-  private element: HTMLAnchorElement;
-  private enabled: boolean;
+  private element: HTMLButtonElement;
 
   public constructor({
     title,
     handler,
     id,
     primary = false,
-    enabled = true
+    enabled = true,
+    variant = 'light'
   }: OptionParameters) {
-    this.element = document.createElement('a');
-    this.element.className = 'btn';
-    primary && this.element.classList.add('btn-primary');
+    this.element = document.createElement('button');
+    this.element.type = 'button';
+    primary && (variant = 'primary');
+    this.element.className = `btn btn-${variant}`;
     this.element.innerText = title;
     this.element.addEventListener('click', handler);
-    this.enabled = enabled;
+    this.element.disabled = !enabled;
     this.element.id = id || crypto.randomUUID();
   }
 
   public getElement = () => this.element;
 
-  public isEnabled = () => this.enabled;
-
   public getId = () => this.element.id;
 }
 
-export function add(param: OptionParameters): OptionID {
+export function add(param: OptionParameters): HTMLButtonElement {
   const option = new OptionButton(param);
   options.push(option);
-  if (option.isEnabled()) {
-    container.append(option.getElement());
-  }
-  return option.getId();
+  container.append(option.getElement());
+  return option.getElement();
 }

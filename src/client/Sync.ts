@@ -1,15 +1,13 @@
 import * as Progress from './Progress';
 
 export default function Sync() {
-  fetch(`${process.env.URL}/ready`)
+  const [event] = arguments;
+  (event.target as HTMLButtonElement).disabled = true;
+  fetch(`${process.env.URL}/sync`)
     .then((response) => response.json())
-    .then(({ ready }) => {
-      if (ready) {
-        fetch(`${process.env.URL}/sync`)
-          .then((response) => response.json())
-          .then(Progress.display);
-      } else {
-        // FIXME open new window to do interactive authentication
-      }
-    });
+    .then((progress) =>
+      Progress.display(progress, () => {
+        (event.target as HTMLButtonElement).disabled = false;
+      })
+    );
 }

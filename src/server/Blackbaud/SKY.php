@@ -57,9 +57,10 @@ class SKY
         $get,
         $interactive = true
     ) {
-        $token = new AccessToken(Secrets::get(self::Bb_TOKEN, true));
+        $cachedToken = Secrets::get(self::Bb_TOKEN, true);
+        $token = $cachedToken ? new AccessToken($cachedToken) : null;
+
         // acquire a Bb SKY API access token
-        /** @var AccessToken|null $token **/
         if (empty($token)) {
             if ($interactive) {
                 // interactively acquire a new Bb access token
