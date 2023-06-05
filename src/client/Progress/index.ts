@@ -73,12 +73,27 @@ function update(progress: ProgressResponse) {
   const elt = progressBars[id];
   elt.dataset.live = 'yes';
   max && (elt.ariaValueMax = max.toString());
-  value !== undefined && (elt.ariaValueNow = value.toString());
-  value !== undefined &&
-    max &&
-    ((elt.firstElementChild as HTMLDivElement).style.width = `${(value * 100) / max
-      }%`);
-  status && ((elt.firstElementChild as HTMLDivElement).innerText = status);
+  if (value !== undefined) {
+    elt.ariaValueNow = value.toString();
+  } else {
+    elt.removeAttribute('aria-value-now');
+  }
+  if (max !== undefined) {
+    elt.ariaValueMax = max.toString();
+  } else {
+    elt.removeAttribute('aria-value-max');
+  }
+  const bar = elt.firstElementChild as HTMLDivElement;
+  if (value !== undefined && max) {
+    bar.style.width = `${(value * 100) / max}%`;
+  } else {
+    bar.style.width = '0%';
+  }
+  if (status) {
+    bar.innerText = status;
+  } else {
+    bar.innerText = '';
+  }
   for (const childId in children) {
     update(children[childId]);
   }

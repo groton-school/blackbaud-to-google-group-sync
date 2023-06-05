@@ -18,6 +18,23 @@ define('APP_NAME', 'Blackbaud to Google Group Sync');
 
 $progress = new Progress();
 $progress->setContext(['sync' => $progress->getId()]);
+$bbProgress = new Progress([
+    'name' => 'Blackbaud',
+]);
+$progress->addChild($bbProgress);
+$gProgress = new Progress([
+    'name' => 'Google',
+]);
+$progress->addChild($gProgress);
+$removeProgress = new Progress([
+    'name' => 'Remove',
+]);
+$progress->addChild($removeProgress);
+$addProgress = new Progress([
+    'name' => 'Add',
+]);
+$progress->addChild($addProgress);
+
 try {
     $progress->setStatus('start');
     $token = SKY::getToken($_SERVER, $_SESSION, $_GET, false);
@@ -52,37 +69,35 @@ try {
         $progress->setStatus($bbGroup->getName());
         $response = $school->get("lists/advanced/{$list['id']}");
 
-        $bbProgress = new Progress([
-            'name' => 'Blackbaud',
-            'status' => 'Parsing Blackbaud group',
-            'context' => [
-                'sync' => $progress->getId(),
-                'blackbaud-id' => $bbGroup->getId(),
-                'google-email' => $bbGroup->getParamEmail(),
-            ],
+        $bbProgress->setContext([
+            'sync' => $progress->getId(),
+            'blackbaud-id' => $bbGroup->getId(),
+            'google-email' => $bbGroup->getParamEmail(),
         ]);
-        $progress->addChild($bbProgress);
+        $bbProgress->setStatus('Parsing Blackbaud group');
+        $bbProgress->setValue(0);
+        $bbProgress->setMax(count($response['results']['rows']));
 
         /** @var Member[] */
         $bbMembers = [];
-        $bbProgress->setMax(count($response['results']['rows']));
         foreach ($response['results']['rows'] as $data) {
             try {
                 $member = new Member($data);
                 $bbMembers[$member->getEmail()] = $member;
-                $bbProgress->setStatus($member->getEmail());
             } catch (Exception $e) {
                 $progress->exception($e, ['data' => $data], Level::Warning);
             }
             $bbProgress->increment();
         }
-        $bbProgress->setStatus('Parsed Blackbaud group', [
-            'blackbaud-id' => $bbGroup->getId(),
-            'name' => $bbGroup->getName(),
-            'count' => count($bbMembers),
-        ]);
+        $bbProgress->setStatus(
+            "Parsed '" .
+                $bbGroup->getName() .
+                "' (" .
+                count($bbMembers) .
+                ' members)'
+        );
 
-        $purge = [];
+        $remove = [];
         $gGroup = [];
         $pageToken = null;
         do {
@@ -93,26 +108,16 @@ try {
             $pageToken = $page->getNextPageToken();
             $gGroup = array_merge($gGroup, $page->getMembers());
         } while ($pageToken);
-        $gProgress = new Progress([
-            'name' => 'Google',
-            'max' => count($gGroup),
-            'status' => 'Parsing Google group',
-            'context' => [
-                'sync' => $progress->getId(),
-                'blackbaud-id' => $bbGroup->getId(),
-                'google-email' => $bbGroup->getParamEmail(),
-            ],
-        ]);
-        $progress->addChild($gProgress);
-        $gProgress->setStatus('Parsed Google group information', [
+        $gProgress->setContext([
+            'sync' => $progress->getId(),
             'blackbaud-id' => $bbGroup->getId(),
-            'email' => $bbGroup->getParamEmail(),
-            'count' => count($gGroup),
+            'google-email' => $bbGroup->getParamEmail(),
         ]);
+        $gProgress->setStatus('Parsing Google group');
+        $gProgress->setValue(0);
         $gProgress->setMax(count($gGroup));
         foreach ($gGroup as $gMember) {
             /** @var DirectoryMember $gMember */
-            $gProgress->setStatus($gMember->getEmail());
             if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                 unset($bbMembers[$gMember->getEmail()]);
             } else {
@@ -121,45 +126,48 @@ try {
                     ($bbGroup->getParamDangerouslyPurgeGoogleGroupOwners() &&
                         $gMember->getRole() === 'OWNER')
                 ) {
-                    array_push($purge, $gMember);
+                    array_push($remove, $gMember);
                 }
             }
             $gProgress->increment();
         }
-        $purgeProgress = new Progress([
-            'name' => 'Purge',
-            'max' => count($purge),
-            'status' => 'Purging removed members',
-            'context' => [
-                'sync' => $progress->getId(),
-                'blackbaud-id' => $bbGroup->getId(),
-                'google-email' => $bbGroup->getParamEmail(),
-            ],
+        $gProgress->setStatus(
+            "Parsed '" .
+                $bbGroup->getParamEmail() .
+                "' (" .
+                count($gGroup) .
+                ' members)'
+        );
+
+        $removeProgress->setContext([
+            'sync' => $progress->getId(),
+            'blackbaud-id' => $bbGroup->getId(),
+            'google-email' => $bbGroup->getParamEmail(),
         ]);
-        $progress->addChild($purgeProgress);
-        $purgeProgress->setMax(count($purge));
-        foreach ($purge as $gMember) {
-            $purgeProgress->setStatus("Removing '{$gMember->getEmail()}'");
+        $removeProgress->setValue(0);
+        $removeProgress->setMax(count($remove));
+        foreach ($remove as $gMember) {
+            $removeProgress->setStatus("Removing '{$gMember->getEmail()}'");
             $directory->members->delete(
                 $bbGroup->getParamEmail(),
                 $gMember->getEmail()
             );
-            $purgeProgress->increment();
+            $removeProgress->increment();
         }
-        $purgeProgress->setStatus('Out-dated members purged');
+        $removeProgress->setStatus(
+            'Removed ' .
+                count($remove) .
+                " members from '" .
+                $bbGroup->getParamEmail() .
+                "'"
+        );
 
-        $addProgress = new Progress([
-            'name' => 'Add',
-            'max' =>
-                count($bbMembers) + ($bbGroup->getParamUpdateName() ? 1 : 0),
-            'status' => 'Adding new members',
-            'context' => [
-                'sync' => $progress->getId(),
-                'blackbaud-id' => $bbGroup->getId(),
-                'google-email' => $bbGroup->getParamEmail(),
-            ],
+        $addProgress->setContext([
+            'sync' => $progress->getId(),
+            'blackbaud-id' => $bbGroup->getId(),
+            'google-email' => $bbGroup->getParamEmail(),
         ]);
-        $progress->addChild($addProgress);
+        $addProgress->setValue(0);
         $addProgress->setMax(
             count($bbMembers) + ($bbGroup->getParamUpdateName() ? 1 : 0)
         );
@@ -182,6 +190,13 @@ try {
                 );
             }
         }
+        $addProgress->setStatus(
+            'Added ' .
+                count($bbMembers) .
+                " members to '" .
+                $bbGroup->getParamEmail() .
+                "'"
+        );
 
         if ($bbGroup->getParamUpdateName()) {
             $gGroup = $directory->groups->get($bbGroup->getParamEmail());
@@ -194,12 +209,11 @@ try {
                 $addProgress->increment();
             }
         }
-        $addProgress->setStatus('New members added');
 
-        $progress->removeChild($bbProgress);
-        $progress->removeChild($gProgress);
-        $progress->removeChild($purgeProgress);
-        $progress->removeChild($addProgress);
+        $bbProgress->reset();
+        $gProgress->reset();
+        $removeProgress->reset();
+        $addProgress->reset();
         $progress->increment();
     }
     Async::result(fn() => $progress->setStatus('complete'));

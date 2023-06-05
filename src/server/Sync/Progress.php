@@ -8,6 +8,7 @@ use Google\AppEngine\Api\Memcache\Memcached;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use Ramsey\Uuid\Uuid;
 
 class Progress implements JsonSerializable
 {
@@ -30,10 +31,18 @@ class Progress implements JsonSerializable
         $this->logger->pushHandler(
             new SyslogHandler('sync', LOG_USER, Level::Debug)
         );
+        $this->reset($params);
+    }
 
+    public function reset(array $params = [])
+    {
+        $this->value = null;
+        $this->max = null;
+        $this->status = null;
+        $this->defaultContext = [];
         foreach ($params as $key => $value) {
             switch ($key) {
-                case 'id':
+                case 'name':
                 case 'value':
                 case 'max':
                 case 'status':
@@ -47,7 +56,7 @@ class Progress implements JsonSerializable
             }
         }
         if (empty($this->id)) {
-            $this->id = md5(time());
+            $this->id = Uuid::uuid7();
         }
         if ($this->max && !$this->value) {
             $this->value = 0;
@@ -80,6 +89,11 @@ class Progress implements JsonSerializable
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function setValue(
