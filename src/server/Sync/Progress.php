@@ -109,6 +109,11 @@ class Progress implements JsonSerializable
         $this->setValue($this->value + 1, $context, $level);
     }
 
+    public function getMax()
+    {
+        return $this->max;
+    }
+
     public function setMax(int $max, ?array $context = [], ?Level $level = null)
     {
         if ($this->value === null) {

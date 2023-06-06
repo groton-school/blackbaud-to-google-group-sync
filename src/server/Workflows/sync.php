@@ -18,22 +18,6 @@ define('APP_NAME', 'Blackbaud to Google Group Sync');
 
 $progress = new Progress();
 $progress->setContext(['sync' => $progress->getId()]);
-$bbProgress = new Progress([
-    'name' => 'Blackbaud',
-]);
-$progress->addChild($bbProgress);
-$gProgress = new Progress([
-    'name' => 'Google',
-]);
-$progress->addChild($gProgress);
-$removeProgress = new Progress([
-    'name' => 'Remove',
-]);
-$progress->addChild($removeProgress);
-$addProgress = new Progress([
-    'name' => 'Add',
-]);
-$progress->addChild($addProgress);
 
 try {
     $progress->setStatus('start');
@@ -69,14 +53,18 @@ try {
         $progress->setStatus($bbGroup->getName());
         $response = $school->get("lists/advanced/{$list['id']}");
 
-        $bbProgress->setContext([
-            'sync' => $progress->getId(),
-            'blackbaud-id' => $bbGroup->getId(),
-            'google-email' => $bbGroup->getParamEmail(),
+        $listProgress = new Progress([
+            'name' => $bbGroup->getName(),
+            'value' => 0,
+            'max' => count($response['results']['rows']) * 2,
+            'context' => [
+                'sync' => $progress->getId(),
+                'blackbaud-id' => $bbGroup->getId(),
+                'google-email' => $bbGroup->getParamEmail(),
+            ],
         ]);
-        $bbProgress->setStatus('Parsing Blackbaud group');
-        $bbProgress->setValue(0);
-        $bbProgress->setMax(count($response['results']['rows']));
+        $progress->addChild($listProgress);
+        $listProgress->setStatus('Parsing Blackbaud group');
 
         /** @var Member[] */
         $bbMembers = [];
@@ -87,9 +75,9 @@ try {
             } catch (Exception $e) {
                 $progress->exception($e, ['data' => $data], Level::Warning);
             }
-            $bbProgress->increment();
+            $listProgress->increment();
         }
-        $bbProgress->setStatus(
+        $listProgress->setStatus(
             "Parsed '" .
                 $bbGroup->getName() .
                 "' (" .
@@ -108,14 +96,8 @@ try {
             $pageToken = $page->getNextPageToken();
             $gGroup = array_merge($gGroup, $page->getMembers());
         } while ($pageToken);
-        $gProgress->setContext([
-            'sync' => $progress->getId(),
-            'blackbaud-id' => $bbGroup->getId(),
-            'google-email' => $bbGroup->getParamEmail(),
-        ]);
-        $gProgress->setStatus('Parsing Google group');
-        $gProgress->setValue(0);
-        $gProgress->setMax(count($gGroup));
+        $listProgress->setStatus('Parsing Google group');
+        $listProgress->setMax(count($bbMembers) + count($gGroup));
         foreach ($gGroup as $gMember) {
             /** @var DirectoryMember $gMember */
             if (array_key_exists($gMember->getEmail(), $bbMembers)) {
@@ -129,9 +111,9 @@ try {
                     array_push($remove, $gMember);
                 }
             }
-            $gProgress->increment();
+            $listProgress->increment();
         }
-        $gProgress->setStatus(
+        $listProgress->setStatus(
             "Parsed '" .
                 $bbGroup->getParamEmail() .
                 "' (" .
@@ -139,22 +121,16 @@ try {
                 ' members)'
         );
 
-        $removeProgress->setContext([
-            'sync' => $progress->getId(),
-            'blackbaud-id' => $bbGroup->getId(),
-            'google-email' => $bbGroup->getParamEmail(),
-        ]);
-        $removeProgress->setValue(0);
-        $removeProgress->setMax(count($remove));
+        $listProgress->setMax($listProgress->getMax() + count($remove));
         foreach ($remove as $gMember) {
-            $removeProgress->setStatus("Removing '{$gMember->getEmail()}'");
+            $listProgress->setStatus("Removing '{$gMember->getEmail()}'");
             $directory->members->delete(
                 $bbGroup->getParamEmail(),
                 $gMember->getEmail()
             );
-            $removeProgress->increment();
+            $listProgress->increment();
         }
-        $removeProgress->setStatus(
+        $listProgress->setStatus(
             'Removed ' .
                 count($remove) .
                 " members from '" .
@@ -162,35 +138,31 @@ try {
                 "'"
         );
 
-        $addProgress->setContext([
-            'sync' => $progress->getId(),
-            'blackbaud-id' => $bbGroup->getId(),
-            'google-email' => $bbGroup->getParamEmail(),
-        ]);
-        $addProgress->setValue(0);
-        $addProgress->setMax(
-            count($bbMembers) + ($bbGroup->getParamUpdateName() ? 1 : 0)
+        $listProgress->setMax(
+            $listProgress->getMax() +
+                count($bbMembers) +
+                ($bbGroup->getParamUpdateName() ? 1 : 0)
         );
         foreach ($bbMembers as $bbMember) {
             try {
-                $addProgress->setStatus("Adding {$bbMember->getEmail()}");
+                $listProgress->setStatus("Adding {$bbMember->getEmail()}");
                 $directory->members->insert(
                     $bbGroup->getParamEmail(),
                     new DirectoryMember([
                         'email' => $bbMember->getEmail(),
                     ])
                 );
-                $addProgress->increment();
+                $listProgress->increment();
             } catch (Exception $e) {
                 $error = json_decode($e->getMessage(), true)['error'];
-                $addProgress->log(
+                $listProgress->log(
                     Level::Warning,
                     $error['message'],
                     array_merge(['email' => $bbMember->getEmail()], $error)
                 );
             }
         }
-        $addProgress->setStatus(
+        $listProgress->setStatus(
             'Added ' .
                 count($bbMembers) .
                 " members to '" .
@@ -201,20 +173,17 @@ try {
         if ($bbGroup->getParamUpdateName()) {
             $gGroup = $directory->groups->get($bbGroup->getParamEmail());
             if ($gGroup->getName() != $bbGroup->getName()) {
-                $addProgress->setStatus(
+                $listProgress->setStatus(
                     "Changing group name to '{$bbGroup->getName()}'"
                 );
                 $gGroup->setName($bbGroup->getName());
                 $directory->groups->update($gGroup->getId(), $gGroup);
-                $addProgress->increment();
+                $listProgress->increment();
             }
         }
 
-        $bbProgress->reset();
-        $gProgress->reset();
-        $removeProgress->reset();
-        $addProgress->reset();
         $progress->increment();
+        $progress->removeChild($listProgress);
     }
     Async::result(fn() => $progress->setStatus('complete'));
 } catch (Exception $e) {
