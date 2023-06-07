@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack",
-    "deploy": "source .env; yes | gcloud app deploy --project=$PROJECT --verbosity=info",
+    "deploy": "source .env; gcloud app deploy --project=$PROJECT --verbosity=info --quiet",
     "logs": "source .env; gcloud app logs tail -s default --project=$PROJECT",
     "update": "pnpm up; npm up --lock-file-only"
   },
