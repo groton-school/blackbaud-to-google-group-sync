@@ -37,11 +37,11 @@ The actual running app is hosted in the Google Cloud.
 2. Under [IAM & Admin](https://console.cloud.google.com/iam-admin/iam) add a Google Workspace admin user as a principal with `Owner` role. (Their username will become the `GOOGLE_DELEGATED_ADMIN` Secret)
 3. In [APIs & Services](https://console.cloud.google.com/apis/dashboard)
    1. Configure the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent)
-   1. Create with User type Internal
-   1. Add App information (minimally App name, User support email, developer email) and Save and Continue
-   1. Enable the Admin SDK API
-   1. Under [Credentials](https://console.cloud.google.com/apis/credentials), create a Service Account
-   1. Add a key to the Service Account and download the JSON credentials file (contents will become the `GOOGLE_CREDENTIALS` Secret)
+   2. Create with User type Internal
+   3. Add App information (minimally App name, User support email, developer email) and Save and Continue
+   4. Enable the Admin SDK API
+   5. Under [Credentials](https://console.cloud.google.com/apis/credentials), create a Service Account
+   6. Add a key to the Service Account and download the JSON credentials file (contents will become the `GOOGLE_CREDENTIALS` Secret)
 4. Copy the Unique ID of the Service Account (a 21-digit number)
 5. In Google Workspace Admin, go to Security/Access and data control/API controls and [Manage Domain Wide Delegation](https://admin.google.com/ac/owl/domainwidedelegation)
 6. Add a new API client
