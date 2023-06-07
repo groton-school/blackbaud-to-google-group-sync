@@ -114,6 +114,8 @@ The app stores credentials encrypted in the Secret Manager
 
 #### Cloud Scheduler setup
 
+The app runs automatically on a schedule
+
 1. Go to the [Cloud Scheduler](https://console.cloud.google.com/cloudscheduler)
 2. Create Job
    1. Name it something reasonable like `daily-blackbaud-to-google-group-sync`
