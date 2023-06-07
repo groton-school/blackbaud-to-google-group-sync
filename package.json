@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack",
-    "serve": "webpack serve",
     "deploy": "source .env; yes | gcloud app deploy --project=$PROJECT --verbosity=info",
-    "logs": "source .env; gcloud app logs tail -s default --project=$PROJECT"
+    "logs": "source .env; gcloud app logs tail -s default --project=$PROJECT",
+    "update": "pnpm up; npm up --lock-file-only"
   },
   "keywords": [],
   "author": {

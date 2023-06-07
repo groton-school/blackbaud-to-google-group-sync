@@ -11,7 +11,6 @@ The basic idea of this script is that it will perform a one-way sync of membersh
 You need to prep the repository from a development workstation. You will need the following toolchain installed:
 
 - [`npm`](nodejs.org) installed as part of `node.js`
-- [`pnpm`](https://pnpm.io/) not 100% necessary, but so much faster than `npm`
 - [`composer`](https://pnpm.io/)
 - [`git`](https://git-scm.com/)
 - [`gcloud`](https://cloud.google.com/sdk/docs/install)
@@ -21,7 +20,7 @@ In your shell:
 ```bash
 git clone https://github.com/groton-school/blackbaud-to-google-group-sync.git
 cd blackbaud-to-google-group-sync
-pnpm install
+npm install
 composer install
 cp .env.example .env
 ```
