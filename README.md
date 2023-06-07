@@ -14,6 +14,7 @@ You need to prep the repository from a development workstation. You will need th
 - [`pnpm`](https://pnpm.io/) not 100% necessary, but so much faster than `npm`
 - [`composer`](https://pnpm.io/)
 - [`git`](https://git-scm.com/)
+- [`gcloud`](https://cloud.google.com/sdk/docs/install)
 
 In your shell:
 
@@ -39,7 +40,7 @@ The actual running app is hosted in the Google Cloud.
    1. Configure the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent)
    1. Create with User type Internal
    1. Add App information (minimally App name, User support email, developer email) and Save and Continue
-   1. Enable the `Admin SDK API`
+   1. Enable the Admin SDK API
    1. Under [Credentials](https://console.cloud.google.com/apis/credentials), create a Service Account
    1. Add a key to the Service Account and download the JSON credentials file (contents will become the `GOOGLE_CREDENTIALS` Secret)
 4. Copy the Unique ID of the Service Account (a 21-digit number)
