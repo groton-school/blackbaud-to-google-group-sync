@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 (async () => {
   const process = require('process');
   const fs = require('fs');
@@ -140,12 +141,17 @@
   exec('composer install');
 
   // create a new project
-  let response = gcloud(
-    `projects create --name="${appName}" ${projectId}`,
-    false
-  );
-  if (/error/i.test(response)) {
-    console.error(response);
+  try {
+    let response = gcloud(
+      `projects create --name="${appName}" ${projectId}`,
+      false
+    );
+    if (/error/i.test(response)) {
+      console.error(response);
+      process.exit(1);
+    }
+  } catch (e) {
+    console.error(e);
     process.exit(1);
   }
 
