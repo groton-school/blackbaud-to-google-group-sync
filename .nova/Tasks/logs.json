@@ -1,8 +1,8 @@
 {
   "actions" : {
-    "build" : {
+    "run" : {
       "enabled" : true,
-      "script" : "npm run update\nnpm run build"
+      "script" : "npm run logs"
     }
   },
   "openLogOnRun" : "start"

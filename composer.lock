@@ -81,7 +81,6 @@
                 "issues": "https://github.com/battis/Path/issues",
                 "source": "https://github.com/battis/Path/tree/v0.1"
             },
-            "abandoned": true,
             "time": "2021-12-18T23:47:33+00:00"
         },
         {
@@ -354,20 +353,20 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.302.0",
+            "version": "v0.303.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "ac872f59a7b4631b12628fe990c167d18a71c783"
+                "reference": "b9c143453a94d5e6ed7257d065dcc5662619eaf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/ac872f59a7b4631b12628fe990c167d18a71c783",
-                "reference": "ac872f59a7b4631b12628fe990c167d18a71c783",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/b9c143453a94d5e6ed7257d065dcc5662619eaf4",
+                "reference": "b9c143453a94d5e6ed7257d065dcc5662619eaf4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6"
+                "php": "^7.4||^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.7||^8.5.13"
@@ -392,9 +391,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.302.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.303.0"
             },
-            "time": "2023-05-16T01:08:12+00:00"
+            "time": "2023-06-04T01:12:12+00:00"
         },
         {
             "name": "google/appengine-php-sdk",
@@ -526,16 +525,16 @@
         },
         {
             "name": "google/cloud-secret-manager",
-            "version": "v1.11.0",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-secret-manager.git",
-                "reference": "26b6538808707f3dda313dec0954dda4aed58fff"
+                "reference": "b1bcf9e52b89095fc81f23e6f3852873ccce612a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-secret-manager/zipball/26b6538808707f3dda313dec0954dda4aed58fff",
-                "reference": "26b6538808707f3dda313dec0954dda4aed58fff",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-secret-manager/zipball/b1bcf9e52b89095fc81f23e6f3852873ccce612a",
+                "reference": "b1bcf9e52b89095fc81f23e6f3852873ccce612a",
                 "shasum": ""
             },
             "require": {
@@ -571,9 +570,9 @@
             ],
             "description": "Secret Manager Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-secret-manager/tree/v1.11.0"
+                "source": "https://github.com/googleapis/google-cloud-php-secret-manager/tree/v1.12.0"
             },
-            "time": "2023-05-05T23:01:42+00:00"
+            "time": "2023-06-02T23:56:27+00:00"
         },
         {
             "name": "google/common-protos",

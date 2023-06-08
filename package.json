@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack",
-    "deploy": "source .env; gcloud app deploy --project=$PROJECT --verbosity=info --quiet",
-    "logs": "source .env; gcloud app logs tail -s default --project=$PROJECT",
+    "deploy": "node scripts/deploy.js",
+    "logs": "node scripts/logs.js",
     "update": "pnpm up; npm up --lock-file-only"
   },
   "keywords": [],
@@ -17,7 +17,9 @@
   "devDependencies": {
     "@battis/eslint-config": "github:battis/eslint-config",
     "@battis/prettier-config": "github:battis/prettier-config",
-    "@battis/webpack": "github:battis/webpack"
+    "@battis/webpack": "github:battis/webpack",
+    "dotenv": "^16.1.4",
+    "rword": "^3.2.1"
   },
   "prettier": "@battis/prettier-config",
   "eslintConfig": {
