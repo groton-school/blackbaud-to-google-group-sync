@@ -2,6 +2,7 @@
   "name": "blackbaud-to-google-group-sync",
   "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "build": "webpack",
     "deploy": "node scripts/deploy.js",
@@ -18,11 +19,17 @@
     "@battis/eslint-config": "github:battis/eslint-config",
     "@battis/prettier-config": "github:battis/prettier-config",
     "@battis/webpack": "github:battis/webpack",
+    "@inquirer/prompts": "^2.1.1",
     "dotenv": "^16.1.4",
+    "email-validator": "^2.0.4",
+    "open": "^9.1.0",
     "rword": "^3.2.1"
   },
   "prettier": "@battis/prettier-config",
   "eslintConfig": {
-    "extends": "@battis/eslint-config"
+    "extends": "@battis/eslint-config",
+    "parserOptions": {
+      "sourceType": "module"
+    }
   }
 }
