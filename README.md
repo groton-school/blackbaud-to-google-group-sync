@@ -20,7 +20,13 @@ git clone https://github.com/groton-school/blackbaud-to-google-group-sync.git
 cd blackbaud-to-google-group-sync
 npm install
 composer install
-node scripts/setup.js
+./scripts/setup.js
 ```
 
 The setup script will prompt you with a series of interactive questions to enter credentials from Blackbaud SKY and to make choices about configuration in Google Cloud, including app access.
+
+Calling the setup scrip with the `--help` flag describes its usage (which includes the ability to pass in all user-configurable values from the command line) -- although it will still confirm those values interacively as it runs.
+
+```bash
+./scripts/setup.js --help
+```
