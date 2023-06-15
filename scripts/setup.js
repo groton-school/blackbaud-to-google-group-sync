@@ -12,6 +12,51 @@ import { fileURLToPath } from 'url';
 import gcloud from './gcloud.js';
 import lib from './lib.js';
 
+const options = {
+  project: {
+    description: 'Google Cloud project unique identifier'
+  },
+  name: {
+    description: 'Google Cloud project name',
+    default: 'Blackbaud-to-Google Group Sync'
+  },
+  billing: {
+    description: 'Google Cloud billing account ID for this project'
+  },
+  delegatedAdmin: {
+    description:
+      'Google Workspace admin account that will delegate access to Admin SDK API'
+  },
+  region: {
+    description: 'Google Cloud region in which to create App Engine instance'
+  },
+  supportEmail: {
+    description: 'Support email address for app OAuth consent screen'
+  },
+  users: {
+    description: 'Google IDs of users allowed to access app (comma-separated)'
+  },
+  accessKey: {
+    description: 'Blackbaud SKY API subscription access key',
+    url: 'https://developer.blackbaud.com/subscriptions'
+  },
+  clientId: {
+    description: 'Blackbaud SKY API app OAuth client ID',
+    url: 'https://developer.blackbaud.com/apps'
+  },
+  clientSecret: {
+    description: 'Blackbaud SKY API app OAuth client secret'
+  },
+  scheduleName: {
+    description: 'Google Cloud Scheduler task name for automatic sync',
+    default: 'daily-blackbaud-to-google-group-sync'
+  },
+  scheduleCron: {
+    description: 'Google Cloud Scheduler crontab definition for automatic sync',
+    default: '0 1 * * *'
+  }
+};
+
 const nonEmptyValidator = (value) =>
   (value && value.length > 0) || 'May not be empty';
 const maxLengthValidator = (maxLength, value) =>
@@ -37,57 +82,23 @@ async function parseArguments() {
     .flag({
       help: {
         short: 'h'
-      }
-    })
-    .opt({
-      project: {
-        short: 'p',
-        description: 'Google Cloud project unique identifier'
       },
-      name: {
-        short: 'n',
-        description: 'Google Cloud project name',
-        default: 'Blackbaud-to-Google Group Sync'
+      delegated: {
+        short: 'g',
+        description:
+          'Google Workspace admin has already delegated access to Admin SDK API'
       },
-      billing: {
+      built: {
         short: 'b',
-        description: 'Google Cloud billing account ID for this project'
+        description: 'App build is current, does not need to be recompiled'
       },
-      delegatedAdmin: {
-        short: 'a',
-        description:
-          'Google Workspace admin account that will delegate access to Admin SDK API'
-      },
-      region: {
-        short: 'r',
-        description:
-          'Google Cloud region in which to create App Engine instance'
-      },
-      supportEmail: {
-        short: 'e',
-        description: 'Support email address for app OAuth consent screen'
-      },
-      scheduleName: {
-        short: 's',
-        description: 'Google Cloud Scheduler task name for automatic sync',
-        default: 'daily-blackbaud-to-google-group-sync'
-      },
-      scheduleCron: {
-        short: 'c',
-        description:
-          'Google Cloud Scheduler crontab definition for automatic sync',
-        default: '0 1 * * *'
+      deployed: {
+        short: 'd',
+        description: 'Deployent to App Engine is current, no need to redeploy'
       }
     })
-    .optList({
-      user: {
-        short: 'u',
-        description: 'Google ID of user who can access the app through IAP',
-        delim: ',',
-        default: []
-      }
-    });
-  const { values } = await j.parse();
+    .opt(options);
+  const { values } = j.parse();
   if (values.help) {
     lib.log(j.usage());
     process.exit(0);
@@ -97,13 +108,13 @@ async function parseArguments() {
 
 async function initializeProject({ projectName, projectId = undefined }) {
   projectName = await input({
-    message: 'Google Cloud project name',
+    message: options.name.description,
     validate: maxLengthValidator.bind(null, 30),
     default: projectName
   });
   gcloud.setProjectId(
     await input({
-      message: 'Google Cloud project ID',
+      message: options.project.description,
       validate: maxLengthValidator.bind(null, 30),
       default: projectId || gcloud.getProjectId()
     })
@@ -178,11 +189,11 @@ async function enableBilling({ accountId = undefined }) {
 
 async function guideGoogleWorkspaceAdminDelegation({
   projectName,
-  delegatedAdmin = undefined
+  delegatedAdmin = undefined,
+  delegated = false
 }) {
   delegatedAdmin = await input({
-    message:
-      'Enter the Google ID for a Workspace Admin who will delegate authority for this app',
+    message: options.delegatedAdmin.description,
     validate: emailValidator,
     default: delegatedAdmin
   });
@@ -190,106 +201,134 @@ async function guideGoogleWorkspaceAdminDelegation({
     `projects add-iam-policy-binding ${gcloud.getProjectId()} --member="user:${delegatedAdmin}" --role="roles/owner"`,
     false
   );
-  gcloud.invoke(`services enable admin.googleapis.com`);
-  const serviceAccount = gcloud.invoke(
-    `iam service-accounts create ${projectName
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/--/g, '-')} --display-name="Google Delegated Admin"`
-  );
-  const credentialsPath = `${serviceAccount.uniqueId}.json`;
+  gcloud.invoke('services enable admin.googleapis.com');
+  const name = projectName
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '-')
+    .replace(/--/g, '-');
+  let serviceAccount = gcloud.invoke(
+    `iam service-accounts list --filter=email=${name}@${gcloud.getProjectId()}.iam.gserviceaccount.com`
+  )[0];
+  if (!serviceAccount) {
+    serviceAccount = gcloud.invoke(
+      `iam service-accounts create ${name} --display-name="Google Delegated Admin"`
+    );
+  }
+  /*
+   * FIXME use Workload Identity Federation
+   *  Service account keys could pose a security risk if compromised. We
+   *  recommend you avoid downloading service account keys and instead use the
+   *  Workload Identity Federation . You can learn more about the best way to
+   *  authenticate service accounts on Google Cloud here.
+   *  https://cloud.google.com/iam/docs/workload-identity-federation
+   *  https://cloud.google.com/blog/products/identity-security/how-to-authenticate-service-accounts-to-help-keep-applications-secure
+   */
+  /*
+   * FIXME max 10 keys available
+   *  Need to delete one to create one
+   */
+  const credentialsPath = `.cache/${serviceAccount.uniqueId}.json`;
   gcloud.invoke(
     `iam service-accounts keys create ${credentialsPath} --iam-account=${serviceAccount.email}`
   );
-  const url =
-    'https://github.com/groton-school/blackbaud-to-google-group-sync/blob/main/docs/google-workspace-admin.md';
-  open(url);
-  await confirm({
-    message: `The Service Account Unique ID is ${lib.value(
-      serviceAccount.uniqueId
-    )}
+  if (!delegated) {
+    const url =
+      'https://github.com/groton-school/blackbaud-to-google-group-sync/blob/main/docs/google-workspace-admin.md';
+    open(url);
+    await confirm({
+      message: `The Service Account Unique ID is ${lib.value(
+        serviceAccount.uniqueId
+      )}
 Confirm that ${lib.value(
-      delegatedAdmin
-    )} has followed the directions at ${lib.value(url)}`
-  });
+        delegatedAdmin
+      )} has followed the directions at ${lib.url(url)}`
+    });
+  }
 
   return { delegatedAdmin, credentialsPath };
 }
 
 async function createAppEngineInstance({ region = undefined }) {
-  // gcloud.invoke(`services enable appengine.googleapis.com`);
-  region =
-    region ||
-    (await select({
-      message: 'Select a region for the app engine instance',
-      choices: gcloud
-        .invoke(`app regions list`)
-        .map((region) => ({ value: region.region }))
-    }));
-  gcloud.invoke(`app create --region=${region}`);
+  gcloud.invoke('services enable appengine.googleapis.com');
+  let app = gcloud.invoke('app describe');
+  if (typeof instance === 'string') {
+    region =
+      region ||
+      (await select({
+        message: options.region.description,
+        choices: gcloud
+          .invoke(`app regions list`)
+          .map((region) => ({ value: region.region }))
+      }));
+    gcloud.invoke(`app create --region=${region}`);
+    app = gcloud.invoke('app describe');
+  }
 
-  const url = `https://${gcloud.invoke(`app describe`).defaultHostname}`;
+  const url = `https://${app.defaultHostname}`;
   fs.writeFileSync(
     '.env',
     `PROJECT=${gcloud.getProjectId()}
-  URL=${url}`
+URL=${url}`
   );
 
-  // create default instance so IAP can be configured
-  lib.exec(`npm run build`);
-  lib.exec(`npm run deploy`);
-
-  return url;
+  return app;
 }
 
 async function enableIdentityAwareProxy({
   projectName,
   supportEmail = undefined,
-  users = []
+  users = undefined
 }) {
   gcloud.invoke(`services enable iap.googleapis.com`);
   supportEmail =
     supportEmail ||
     (await input({
-      message: 'Enter a support email address for the app',
+      message: options.supportEmail.description,
       validate: emailValidator
     }));
-  const brand = gcloud.invoke(
-    `iap oauth-brands create --application_title${projectName} --support_email=${supportEmail}`
-  ).name;
-  const oauth = gcloud.invoke(
-    `iap oauth-clients create ${brand} --display_name=IAP-App-Engine-app`
+  const project = gcloud.invoke(
+    `projects list --filter=projectId=${gcloud.getProjectId()}`,
+    false
+  )[0];
+  let brand = gcloud.invoke(
+    `iap oauth-brands list --filter=name=projects/${project.projectNumber}/brands/${project.projectNumber}`
   );
+  brand = brand && brand.length && brand[0];
+  if (!brand) {
+    brand = gcloud.invoke(
+      `iap oauth-brands create --application_title="${projectName}" --support_email=${supportEmail}`
+    ).name;
+  }
+  let oauth = gcloud.invoke(`iap oauth-clients list ${brand.name}`);
+  oauth = oauth && oauth.length && oauth[0];
+  if (!oauth) {
+    oauth = gcloud.invoke(
+      `iap oauth-clients create ${brand} --display_name=IAP-App-Engine-app`
+    );
+  }
   gcloud.invoke(
     `iap web enable --resource-type=app-engine --oauth2-client-id=${path.basename(
       oauth.name
     )} --oauth2-client-secret=${oauth.secret}`
   );
-  if (users.length === 0) {
-    let done = false;
-    do {
-      const user = await input({
-        message:
-          'Email address of user who can access the app interface (blank to end)',
-        validate: (u) => nonEmptyValidator(u) !== true || emailValidator(u)
-      });
-      if (nonEmptyValidator(user)) {
-        users.push(user);
-      } else {
-        done = true;
-      }
-    } while (!done);
-  } else {
-    const nonEmail = users.filter((user) => !emailValidator(user));
-    if (nonEmail.length) {
-      const plural = nonEmail.length > 1;
-      lib.log(
-        `${lib.value(nonEmail.join(', '))} ${plural ? 'are not' : 'is not a'
-        } valid email address${plural ? 'es' : ''
-        } and will not be assigned to IAP`
-      );
-    }
-  }
+  // FIXME filter users arg for email addresses
+  users = (
+    await input({
+      message: options.users.description,
+      validate: (value) =>
+        value
+          .split(',')
+          .map((val) => val.trim())
+          .reduce(
+            (cond, val) =>
+              cond && nonEmptyValidator(val) && emailValidator(val),
+            true
+          ) || 'all entries must be email addresses',
+      default: users
+    })
+  )
+    .split(',')
+    .map((value) => value.trim());
   users.forEach((user) =>
     gcloud.invoke(
       `projects add-iam-policy-binding ${gcloud.getProjectId()} --member="user:${user}" --role="roles/iap.httpsResourceAccessor"`,
@@ -298,20 +337,31 @@ async function enableIdentityAwareProxy({
   );
 }
 
-async function guideBlackbaudAppCreation({ url }) {
-  const accessKey = await input({
-    message:
-      'Enter a subscription access key from https://developer.blackbaud.com/subscriptions',
-    validate: nonEmptyValidator
+async function guideBlackbaudAppCreation({
+  url,
+  accessKey = undefined,
+  clientId = undefined,
+  clientSecret = undefined
+}) {
+  open(options.accessKey.url);
+  accessKey = await input({
+    message: `${options.accessKey.description} from ${lib.url(
+      options.accessKey.url
+    )}`,
+    validate: nonEmptyValidator,
+    default: accessKey
   });
-  lib.log('Create a new app at https://developer.blackbaud.com/apps');
-  const clientId = await input({
-    message: "Enter the app's OAuth client ID",
-    validate: nonEmptyValidator
+  open(options.clientId.url);
+  lib.log(`Create a new app at ${lib.url(options.clientId.url)}`);
+  clientId = await input({
+    message: options.clientId.description,
+    validate: nonEmptyValidator,
+    default: clientId
   });
-  const clientSecret = await input({
-    message: "Enter one of the app's OAuth secrets",
-    validate: nonEmptyValidator
+  clientSecret = await input({
+    message: options.clientSecret.description,
+    validate: nonEmptyValidator,
+    default: clientSecret
   });
   const redirectUrl = `${url}/redirect`;
   await confirm({
@@ -321,37 +371,83 @@ async function guideBlackbaudAppCreation({ url }) {
   return { accessKey, clientId, clientSecret, redirectUrl };
 }
 
-async function initializeSecretManager({ blackbaud, googleWorkspace }) {
+async function initializeSecretManager({
+  blackbaud,
+  googleWorkspace,
+  serviceAccount
+}) {
   gcloud.invoke(`services enable secretmanager.googleapis.com`);
-  gcloud.secrets.create('BLACKBAUD_ACCESS_KEY', blackbaud.accessKey);
-  gcloud.secrets.create('BLACKBAUD_API_TOKEN', 'null');
-  gcloud.secrets.create('BLACKBAUD_CLIENT_ID', blackbaud.clientId);
-  gcloud.secrets.create('BLACKBAUD_CLIENT_SECRET', blackbaud.clientSecret);
-  gcloud.secrets.create('BLACKBAUD_REDIRECT_URL', blackbaud.redirectUrl);
-  gcloud.secrets.create(
-    'GOOGLE_DELEGATED_ADMIN',
-    googleWorkspace.delegatedAdmin
-  );
-  gcloud.secrets.create(
-    'GOOGLE_CREDENTIALS',
-    googleWorkspace.credentialsPath,
-    true
-  );
+  const secrets = Array.from(gcloud.invoke('secrets list'));
+  const values = {
+    BLACKBAUD_ACCESS_KEY: blackbaud.accessKey,
+    BLACKBAUD_API_TOKEN: 'null',
+    BLACKBAUD_CLIENT_ID: blackbaud.clientId,
+    BLACKBAUD_CLIENT_SECRET: blackbaud.clientSecret,
+    BLACKBAUD_REDIRECT_URL: blackbaud.redirectUrl,
+    GOOGLE_DELEGATED_ADMIN: googleWorkspace.delegatedAdmin,
+    GOOGLE_CREDENTIALS: googleWorkspace.credentialsPath
+  };
+  for (const key in values) {
+    const secret = secrets.reduce((result, secret) => {
+      if (path.basename(secret.name) === key) {
+        return secret.name;
+      }
+      return result;
+    }, undefined);
+    if (secret) {
+      if (key === 'GOOGLE_CREDENTIALS') {
+        gcloud.invoke(
+          `secrets versions add ${secret} --data-file="${values[key]}"`
+        );
+      } else {
+        lib.exec(
+          `echo "${values[key]
+          }" | gcloud secrets versions add ${secret} --data-file=- ${gcloud.getFlagsWithProject()}`
+        );
+      }
+    } else {
+      if (key === 'GOOGLE_CREDENTIALS') {
+        gcloud.invoke(`secrets create ${key} --data-file="${values[key]}"`);
+      } else {
+        lib.exec(
+          `echo "${values[key]
+          }" | gcloud secrets create ${key} --data-file=- ${gcloud.getFlagsWithProject()}`
+        );
+      }
+    }
+  }
+
   fs.unlinkSync(googleWorkspace.credentialsPath);
+
+  gcloud.invoke(
+    `projects add-iam-policy-binding ${gcloud.getProjectId()} --member="serviceAccount:${serviceAccount}" --role="roles/secretmanager.secretAccessor"`,
+    false
+  );
 }
 
 async function guideAuthorizeApp({ url }) {
   await open(url);
   await confirm({
-    message: `Confirm that you have authorized the app at ${lib.value(url)}`
+    message: `Confirm that you have authorized the app at ${lib.url(url)}`
   });
 }
 
-async function scheduleSync({ scheduleName, scheduleCron }) {
+async function scheduleSync({ scheduleName, scheduleCron, location }) {
   gcloud.invoke(`services enable cloudscheduler.googleapis.com`);
-  gcloud.invoke(
-    `scheduler jobs create app-engine ${scheduleName} --schedule="${scheduleCron}" --relative-url="/sync"`
+
+  let schedule = gcloud.invoke(
+    `scheduler jobs list --filter=appEngineHttpTarget.relativeUri=/sync --location=${location}`
   );
+  schedule = schedule && schedule.length && schedule[0];
+  if (schedule) {
+    gcloud.invoke(
+      `scheduler jobs update app-engine ${schedule.name} --schedule="${scheduleCron}"`
+    );
+  } else {
+    gcloud.invoke(
+      `scheduler jobs create app-engine ${scheduleName} --schedule="${scheduleCron}" --relative-url="/sync"`
+    );
+  }
 }
 
 (async () => {
@@ -367,23 +463,44 @@ async function scheduleSync({ scheduleName, scheduleCron }) {
   });
   await createProject({ projectName });
   await enableBilling({ accountId: args.billing });
-  const googleWorkspace = guideGoogleWorkspaceAdminDelegation({
+  const googleWorkspace = await guideGoogleWorkspaceAdminDelegation({
     projectName,
-    delegatedAdmin: args.delegatedAdmin
+    delegatedAdmin: args.delegatedAdmin,
+    delegated: args.delegated
   });
-  const url = await createAppEngineInstance({
+  const app = await createAppEngineInstance({
     region: args.region
   });
+  const url = `https://${app.defaultHostname}`;
+
+  // must create an instance so that IAP can be configured
+  if (!args.built) {
+    lib.exec(`npm run build`);
+  }
+  if (!args.deployed) {
+    lib.exec(`npm run deploy`);
+  }
+
   await enableIdentityAwareProxy({
     projectName,
     supportEmail: args.supportEmail,
-    users: args.user
+    users: args.users
   });
-  const blackbaud = await guideBlackbaudAppCreation({ url });
-  await initializeSecretManager({ blackbaud, googleWorkspace });
+  const blackbaud = await guideBlackbaudAppCreation({
+    url,
+    accessKey: args.accessKey,
+    clientId: args.clientId,
+    clientSecret: args.clientSecret
+  });
+  await initializeSecretManager({
+    blackbaud,
+    googleWorkspace,
+    serviceAccount: app.serviceAccount
+  });
   await guideAuthorizeApp({ url });
   await scheduleSync({
     scheduleName: args.scheduleName,
-    scheduleCron: args.scheduleCron
+    scheduleCron: args.scheduleCron,
+    location: app.locationId
   });
 })();

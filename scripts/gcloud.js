@@ -1,6 +1,5 @@
 import child from 'child_process';
 import { rword } from 'rword';
-import lib from './lib.js';
 
 rword.load('big');
 
@@ -51,16 +50,6 @@ function invokeBeta(command, withProjectId = true) {
   return invoke(`beta ${command}`, withProjectId);
 }
 
-function createSecret(name, value, isPath = false) {
-  if (isPath) {
-    invoke(`secrets create ${name} --data-file=${value}`);
-  } else {
-    lib.exec(
-      `echo "${value}" | gcloud secrets create ${name} --data-file=- ${flagsWithProject}`
-    );
-  }
-}
-
 export default {
   createProjectId,
   setProjectId,
@@ -68,8 +57,5 @@ export default {
   getFlags: () => flags,
   getFlagsWithProject: () => flagsWithProject,
   invoke,
-  invokeBeta,
-  secrets: {
-    create: createSecret
-  }
+  invokeBeta
 };

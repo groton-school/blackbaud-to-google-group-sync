@@ -2,7 +2,8 @@ import chalk from 'chalk';
 import { execSync } from 'child_process';
 import open from 'open';
 
-const value = chalk.cyan;
+const value = chalk.cyan; // mimic @inquirer/prompts
+const url = chalk.yellow;
 
 const log = console.log;
 
@@ -29,4 +30,4 @@ async function versionTest({
   return true;
 }
 
-export default { exec, log, value, versionTest };
+export default { exec, log, value, url, versionTest };
