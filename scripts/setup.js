@@ -2,7 +2,6 @@
 // @ts-nocheck (because it _really_ doesn't like CancelablePromise)
 import { confirm, input, select } from '@inquirer/prompts';
 import dotenv from 'dotenv';
-import email from 'email-validator';
 import fs from 'fs';
 import { jack } from 'jackspeak';
 import open from 'open';
@@ -11,60 +10,8 @@ import process from 'process';
 import { fileURLToPath } from 'url';
 import gcloud from './gcloud.js';
 import lib from './lib.js';
-
-const options = {
-  project: {
-    description: 'Google Cloud project unique identifier'
-  },
-  name: {
-    description: 'Google Cloud project name',
-    default: 'Blackbaud-to-Google Group Sync'
-  },
-  billing: {
-    description: 'Google Cloud billing account ID for this project'
-  },
-  delegatedAdmin: {
-    description:
-      'Google Workspace admin account that will delegate access to Admin SDK API'
-  },
-  region: {
-    description: 'Google Cloud region in which to create App Engine instance'
-  },
-  supportEmail: {
-    description: 'Support email address for app OAuth consent screen'
-  },
-  users: {
-    description: 'Google IDs of users allowed to access app (comma-separated)'
-  },
-  accessKey: {
-    description: 'Blackbaud SKY API subscription access key',
-    url: 'https://developer.blackbaud.com/subscriptions'
-  },
-  clientId: {
-    description: 'Blackbaud SKY API app OAuth client ID',
-    url: 'https://developer.blackbaud.com/apps'
-  },
-  clientSecret: {
-    description: 'Blackbaud SKY API app OAuth client secret'
-  },
-  scheduleName: {
-    description: 'Google Cloud Scheduler task name for automatic sync',
-    default: 'daily-blackbaud-to-google-group-sync'
-  },
-  scheduleCron: {
-    description: 'Google Cloud Scheduler crontab definition for automatic sync',
-    default: '0 1 * * *'
-  }
-};
-
-const nonEmptyValidator = (value) =>
-  (value && value.length > 0) || 'May not be empty';
-const maxLengthValidator = (maxLength, value) =>
-  (nonEmptyValidator(value) && value && value.length <= maxLength) ||
-  `Must be ${maxLength} characters or fewer`;
-const emailValidator = (value) =>
-  (nonEmptyValidator(value) && email.validate(value)) ||
-  'Must be a valid mail address';
+import options from './options.js';
+import validators from './validators.js';
 
 async function verifyExternalDependencies() {
   lib.versionTest({
@@ -109,13 +56,13 @@ async function parseArguments() {
 async function initializeProject({ projectName, projectId = undefined }) {
   projectName = await input({
     message: options.name.description,
-    validate: maxLengthValidator.bind(null, 30),
+    validate: validators.maxLength.bind(null, 30),
     default: projectName
   });
   gcloud.setProjectId(
     await input({
       message: options.project.description,
-      validate: maxLengthValidator.bind(null, 30),
+      validate: validators.maxLength.bind(null, 30),
       default: projectId || gcloud.getProjectId()
     })
   );
@@ -194,7 +141,7 @@ async function guideGoogleWorkspaceAdminDelegation({
 }) {
   delegatedAdmin = await input({
     message: options.delegatedAdmin.description,
-    validate: emailValidator,
+    validate: validators.email,
     default: delegatedAdmin
   });
   gcloud.invoke(
@@ -284,7 +231,7 @@ async function enableIdentityAwareProxy({
     supportEmail ||
     (await input({
       message: options.supportEmail.description,
-      validate: emailValidator
+      validate: validators.email
     }));
   const project = gcloud.invoke(
     `projects list --filter=projectId=${gcloud.getProjectId()}`,
@@ -321,7 +268,7 @@ async function enableIdentityAwareProxy({
           .map((val) => val.trim())
           .reduce(
             (cond, val) =>
-              cond && nonEmptyValidator(val) && emailValidator(val),
+              cond && validators.nonEmpty(val) && validators.email(val),
             true
           ) || 'all entries must be email addresses',
       default: users
@@ -343,24 +290,24 @@ async function guideBlackbaudAppCreation({
   clientId = undefined,
   clientSecret = undefined
 }) {
-  open(options.accessKey.url);
+  !accessKey && options.accessKey.url;
   accessKey = await input({
     message: `${options.accessKey.description} from ${lib.url(
       options.accessKey.url
     )}`,
-    validate: nonEmptyValidator,
+    validate: validators.nonEmpty,
     default: accessKey
   });
-  open(options.clientId.url);
+  !clientId && open(options.clientId.url);
   lib.log(`Create a new app at ${lib.url(options.clientId.url)}`);
   clientId = await input({
     message: options.clientId.description,
-    validate: nonEmptyValidator,
+    validate: validators.nonEmpty,
     default: clientId
   });
   clientSecret = await input({
     message: options.clientSecret.description,
-    validate: nonEmptyValidator,
+    validate: validators.nonEmpty,
     default: clientSecret
   });
   const redirectUrl = `${url}/redirect`;
