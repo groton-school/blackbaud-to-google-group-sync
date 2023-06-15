@@ -18,6 +18,8 @@ In your shell:
 ```bash
 git clone https://github.com/groton-school/blackbaud-to-google-group-sync.git
 cd blackbaud-to-google-group-sync
+npm install
+composer install
 node scripts/setup.js
 ```
 

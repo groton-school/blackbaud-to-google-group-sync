@@ -4,7 +4,6 @@ import path from 'path';
 import process from 'process';
 import { fileURLToPath } from 'url';
 
-// eslint-disable-next-line
 process.chdir(path.join(path.dirname(fileURLToPath(import.meta.url)), '..'));
 dotenv.config();
 

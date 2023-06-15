@@ -1,5 +1,10 @@
+import chalk from 'chalk';
 import { execSync } from 'child_process';
 import open from 'open';
+
+const value = chalk.cyan;
+
+const log = console.log;
 
 const exec = (command) => execSync(command, { stdio: 'inherit' });
 
@@ -14,7 +19,8 @@ async function versionTest({
     if (fail) {
       open(download);
       throw new Error(
-        `${name} is required${download ? `, install from ${download}` : ''}`
+        `${value(name)} is required${download ? `, install from ${value(download)}` : ''
+        }`
       );
     } else {
       return false;
@@ -23,4 +29,4 @@ async function versionTest({
   return true;
 }
 
-export default { exec, versionTest };
+export default { exec, log, value, versionTest };
