@@ -95,7 +95,6 @@ async function createProject({ projectName }) {
 }
 
 async function enableBilling({ accountId = undefined }) {
-  // TODO check if accountId arg exists/is open
   if (!accountId) {
     const choices = gcloud
       .invokeBeta(`billing accounts list --filter=open=true`)
@@ -313,7 +312,12 @@ async function guideBlackbaudAppCreation({
   await confirm({
     message: `Configure ${lib.value(redirectUrl)} as the app's redirect URL`
   });
-  // TODO directions for limiting scope of app
+  const scope =
+    'https://github.com/groton-school/blackbaud-to-google-group-sync/blob/main/docs/blackbaud-api-scope.md';
+  open(scope);
+  await confirm({
+    message: `Limit the SKY API scopes as described at ${lib.url(scope)}`
+  });
   return { accessKey, clientId, clientSecret, redirectUrl };
 }
 
