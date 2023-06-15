@@ -258,7 +258,6 @@ async function enableIdentityAwareProxy({
       oauth.name
     )} --oauth2-client-secret=${oauth.secret}`
   );
-  // FIXME filter users arg for email addresses
   users = (
     await input({
       message: options.users.description,
