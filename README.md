@@ -1,4 +1,4 @@
-# Blackbaud to Google Group Sync
+# Blackbaud-to-Google Group Sync
 
 Sync membership of Blackbaud LMS community groups to Google Groups
 
