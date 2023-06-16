@@ -1,4 +1,7 @@
-export default {
+import { jack } from 'jackspeak';
+import cli from './cli.js';
+
+export const options = {
   project: {
     description: 'Google Cloud project unique identifier'
   },
@@ -42,3 +45,32 @@ export default {
     default: '0 1 * * *'
   }
 };
+
+export async function parseArguments() {
+  const j = jack({ envPrefix: 'ARG' })
+    .flag({
+      help: {
+        short: 'h'
+      },
+      delegated: {
+        short: 'g',
+        description:
+          'Google Workspace admin has already delegated access to Admin SDK API'
+      },
+      built: {
+        short: 'b',
+        description: 'App build is current, does not need to be recompiled'
+      },
+      deployed: {
+        short: 'd',
+        description: 'Deployent to App Engine is current, no need to redeploy'
+      }
+    })
+    .opt(options);
+  const { values } = j.parse();
+  if (values.help) {
+    cli.log(j.usage());
+    process.exit(0);
+  }
+  return values;
+}

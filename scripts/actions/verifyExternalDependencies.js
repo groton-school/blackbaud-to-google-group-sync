@@ -1,13 +1,6 @@
-import chalk from 'chalk';
 import { execSync } from 'child_process';
 import open from 'open';
-
-const value = chalk.cyan; // mimic @inquirer/prompts
-const url = chalk.yellow;
-
-const log = console.log;
-
-const exec = (command) => execSync(command, { stdio: 'inherit' });
+import cli from '../lib/cli.js';
 
 async function versionTest({
   name,
@@ -20,7 +13,7 @@ async function versionTest({
     if (fail) {
       open(download);
       throw new Error(
-        `${value(name)} is required${download ? `, install from ${value(download)}` : ''
+        `${cli.value(name)} is required${download ? `, install from ${cli.url(download)}` : ''
         }`
       );
     } else {
@@ -30,4 +23,13 @@ async function versionTest({
   return true;
 }
 
-export default { exec, log, value, url, versionTest };
+export default async function verifyExternalDependencies() {
+  versionTest({
+    name: 'npm',
+    download: 'https://nodejs.org/'
+  });
+  versionTest({
+    name: 'gcloud',
+    download: 'https://cloud.google.com/sdk/docs/install'
+  });
+}
