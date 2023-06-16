@@ -14,7 +14,7 @@ class Async
         if (session_id()) {
             session_write_close();
         }
-        ob_end_clean();
+        @ob_end_clean();
         ob_start();
 
         call_user_func($output);
