@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import dotenv from 'dotenv';
-import path from 'path';
 import process from 'process';
-import { fileURLToPath } from 'url';
+import cli from './lib/cli.js';
 
-process.chdir(path.join(path.dirname(fileURLToPath(import.meta.url)), '..'));
-dotenv.config();
+cli.setCWDtoProjectRoot();
 
 execSync(
   `gcloud app logs tail -s default --project=${process.env.PROJECT} --quiet`,
