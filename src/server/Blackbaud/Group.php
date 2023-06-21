@@ -65,4 +65,9 @@ class Group
     {
         return $this->getParam('dangerously-purge-google-group-owners', false);
     }
+
+    public function getParamDangerouslyPurgeGoogleSubgroups(): bool
+    {
+        return $this->getParam('dangerously-purge-google-subgroups', false);
+    }
 }

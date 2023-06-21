@@ -104,9 +104,12 @@ try {
                 unset($bbMembers[$gMember->getEmail()]);
             } else {
                 if (
-                    $gMember->getRole() !== 'OWNER' ||
-                    ($bbGroup->getParamDangerouslyPurgeGoogleGroupOwners() &&
-                        $gMember->getRole() === 'OWNER')
+                    ($gMember->getRole() !== 'OWNER' ||
+                        ($bbGroup->getParamDangerouslyPurgeGoogleGroupOwners() &&
+                            $gMember->getRole() === 'OWNER')) &&
+                    ($gMember->getType() !== 'GROUP' ||
+                        ($bbGroup->getParamDangerouslyPurgeGoogleSubgroups() &&
+                            $gMember->getType() === 'GROUP'))
                 ) {
                     array_push($remove, $gMember);
                 }
@@ -123,7 +126,10 @@ try {
 
         $listProgress->setMax($listProgress->getMax() + count($remove));
         foreach ($remove as $gMember) {
-            $listProgress->setStatus("Removing '{$gMember->getEmail()}'");
+            $listProgress->setStatus("Removing '{$gMember->getEmail()}'", [
+                'type' => $gMember->getType(),
+                'role' => $gMember->getRole(),
+            ]);
             $directory->members->delete(
                 $bbGroup->getParamEmail(),
                 $gMember->getEmail()
