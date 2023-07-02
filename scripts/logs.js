@@ -1,14 +1,7 @@
 #!/usr/bin/env node
+const cli = require('@battis/qui-cli');
+const gcloud = require('@battis/partly-gcloudy');
 
-import { execSync } from 'child_process';
-import process from 'process';
-import cli from './lib/cli.js';
-
-cli.setCWDtoProjectRoot();
-
-execSync(
-  `gcloud app logs tail -s default --project=${process.env.PROJECT} --quiet`,
-  {
-    stdio: 'inherit'
-  }
-);
+gcloud.init();
+cli.shell.setSilent(false);
+gcloud.app.logs();
