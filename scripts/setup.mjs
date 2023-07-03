@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-const cli = require('@battis/qui-cli');
-const gcloud = require('@battis/partly-gcloudy');
-const fs = require('fs');
-const path = require('path');
-const options = require('./options');
-const process = require('process');
+import gcloud from '@battis/partly-gcloudy';
+import cli from '@battis/qui-cli';
+import fs from 'fs';
+import path from 'path';
+import process from 'process';
+import options from './options.mjs';
 
 async function guideGoogleWorkspaceAdminDelegation({ email, uniqueId }) {
   await cli.prompts.confirm({

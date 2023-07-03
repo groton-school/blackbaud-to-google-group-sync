@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-const gcloud = require('@battis/partly-gcloudy');
+import gcloud from '@battis/partly-gcloudy';
 gcloud.init();
 gcloud.app.deploy();

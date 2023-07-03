@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   project: {
     description: 'Google Cloud project unique identifier'
   },

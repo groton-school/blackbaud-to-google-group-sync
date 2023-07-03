@@ -2,7 +2,7 @@
   "actions" : {
     "run" : {
       "enabled" : true,
-      "script" : "npm run build\nnpm run deploy"
+      "script" : "npm run deploy"
     }
   },
   "openLogOnRun" : "start"
