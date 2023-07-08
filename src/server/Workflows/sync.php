@@ -15,6 +15,7 @@ require __DIR__ . '/../../../vendor/autoload.php';
 session_start();
 
 define('APP_NAME', 'Blackbaud to Google Group Sync');
+define('Bb_PAGE_SIZE', 1000);
 
 $progress = new Progress();
 $progress->setContext(['sync' => $progress->getId()]);
@@ -51,7 +52,22 @@ try {
     foreach ($lists as $list) {
         $bbGroup = new Group($list);
         $progress->setStatus($bbGroup->getName());
-        $response = $school->get("lists/advanced/{$list['id']}");
+
+        $page = 1;
+        $response = null;
+        $partial = null;
+        do {
+            $partial = $school->get("lists/advanced/{$list['id']}?page=$page");
+            if (!$response) {
+                $response = $partial;
+            } else {
+                array_push(
+                    $response['results']['rows'],
+                    $partial['results']['rows']
+                );
+            }
+            $page++;
+        } while (count($partial['results']['rows']) === Bb_PAGE_SIZE);
 
         $listProgress = new Progress([
             'name' => $bbGroup->getName(),

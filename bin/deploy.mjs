@@ -2,3 +2,4 @@
 import gcloud from '@battis/partly-gcloudy';
 gcloud.init();
 gcloud.app.deploy();
+console.log('Deploy complete.');
