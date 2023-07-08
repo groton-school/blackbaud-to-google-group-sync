@@ -13,6 +13,9 @@ For the contents (members) of an advanced list to be synced successfully out of 
 {
   "email": string, // valid email address for existing Google group in the workspace
   "update-name": boolean, // optional, defaults to `true`
+  "delivery-settings": "ALL_MAIL"|"DAILY"|"DIGEST"|"DISABLED"|"NONE", // optional, defaults to "ALL_MAIL"
   "dangerously-purge-google-group-owners": boolean // optional, defaults to `false`
 }
 ```
+
+`delivery-settings` values determined by Google Admin SDK API [Directory Member endpoint](https://developers.google.com/admin-sdk/directory/reference/rest/v1/members#Member).
