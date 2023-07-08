@@ -3,12 +3,12 @@
   "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
   "version": "1.0.0",
   "scripts": {
-    "setup": "./scripts/setup.mjs",
+    "setup": "./bin/setup.mjs",
     "build": "webpack",
     "deploy": "run-s deploy:*",
     "deploy:build": "npm run build",
-    "deploy:publish": "./scripts/deploy.mjs",
-    "logs": "./scripts/logs.mjs",
+    "deploy:publish": "./bin/deploy.mjs",
+    "logs": "./bin/logs.mjs",
     "update": "pnpm up; npm up --lock-file-only"
   },
   "author": {

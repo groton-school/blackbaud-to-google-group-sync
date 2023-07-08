@@ -124,6 +124,9 @@ try {
                 ' members)'
         );
 
+        $errors = 0;
+        $removed = 0;
+        $added = 0;
         $listProgress->setMax($listProgress->getMax() + count($remove));
         foreach ($remove as $gMember) {
             $listProgress->setStatus("Removing '{$gMember->getEmail()}'", [
@@ -135,13 +138,10 @@ try {
                 $gMember->getEmail()
             );
             $listProgress->increment();
+            $removed++;
         }
         $listProgress->setStatus(
-            'Removed ' .
-                count($remove) .
-                " members from '" .
-                $bbGroup->getParamEmail() .
-                "'"
+            "Removed $removed members from '" . $bbGroup->getParamEmail() . "'"
         );
 
         $listProgress->setMax(
@@ -159,6 +159,7 @@ try {
                     ])
                 );
                 $listProgress->increment();
+                $added++;
             } catch (Exception $e) {
                 $error = json_decode($e->getMessage(), true)['error'];
                 $listProgress->log(
@@ -166,12 +167,16 @@ try {
                     $error['message'],
                     array_merge(['email' => $bbMember->getEmail()], $error)
                 );
+                $errors++;
             }
         }
         $listProgress->setStatus(
-            'Added ' .
-                count($bbMembers) .
-                " members to '" .
+            "Added $added members to '" . $bbGroup->getParamEmail() . "'"
+        );
+        $listProgress->setStatus(
+            "$errors error" .
+                ($errors === 1 ? '' : 's') .
+                " adding and removing members of '" .
                 $bbGroup->getParamEmail() .
                 "'"
         );
