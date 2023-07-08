@@ -114,10 +114,17 @@ try {
         } while ($pageToken);
         $listProgress->setStatus('Parsing Google group');
         $listProgress->setMax(count($bbMembers) + count($gGroup));
+        $deliverySettings = $bbGroup->getParamDeliverySettings();
         foreach ($gGroup as $gMember) {
             /** @var DirectoryMember $gMember */
             if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                 unset($bbMembers[$gMember->getEmail()]);
+                if ($gMember->getDeliverySettings() != $deliverySettings) {
+                    $listProgress->setStatus(
+                        "Setting {$gMember->email} delivery settings to $deliverySettings"
+                    );
+                    $gMember->setDeliverySettings($deliverySettings);
+                }
             } else {
                 if (
                     ($gMember->getRole() !== 'OWNER' ||
@@ -172,6 +179,7 @@ try {
                     $bbGroup->getParamEmail(),
                     new DirectoryMember([
                         'email' => $bbMember->getEmail(),
+                        'delivery_settings' => $deliverySettings,
                     ])
                 );
                 $listProgress->increment();

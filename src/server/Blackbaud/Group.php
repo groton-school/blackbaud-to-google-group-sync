@@ -61,6 +61,11 @@ class Group
         return $this->getParam('update-name', true);
     }
 
+    public function getParamDeliverySettings(): string
+    {
+        return $this->getParam('delivery-settings', 'ALL_MAIL');
+    }
+
     public function getParamDangerouslyPurgeGoogleGroupOwners(): bool
     {
         return $this->getParam('dangerously-purge-google-group-owners', false);
