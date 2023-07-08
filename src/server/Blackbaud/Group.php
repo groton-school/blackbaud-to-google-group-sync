@@ -61,6 +61,11 @@ class Group
         return $this->getParam('update-name', true);
     }
 
+    public function getParamMapEmailTo(): string
+    {
+        return $this->getParam('map-email-to', 'E-Mail');
+    }
+
     public function getParamDeliverySettings(): string
     {
         return $this->getParam('delivery-settings', 'ALL_MAIL');

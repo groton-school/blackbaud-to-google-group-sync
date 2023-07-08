@@ -84,9 +84,10 @@ try {
 
         /** @var Member[] */
         $bbMembers = [];
+        $emailMapping = $bbGroup->getParamMapEmailTo();
         foreach ($response['results']['rows'] as $data) {
             try {
-                $member = new Member($data);
+                $member = new Member($data, $emailMapping);
                 $bbMembers[$member->getEmail()] = $member;
             } catch (Exception $e) {
                 $progress->exception($e, ['data' => $data], Level::Warning);

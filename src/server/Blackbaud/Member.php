@@ -10,13 +10,13 @@ class Member
 
     private array $data;
 
-    public function __construct(array $data)
+    public function __construct(array $data, $emailMapping = 'E-Mail')
     {
         $this->data = $data;
         $email = false;
         foreach ($data['columns'] as $col) {
             switch ($col['name']) {
-                case 'E-Mail':
+                case $emailMapping:
                     if (key_exists('value', $col) && !empty($col['value'])) {
                         $this->email = strtolower($col['value']);
                         $email = true;

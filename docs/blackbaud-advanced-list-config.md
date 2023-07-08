@@ -12,6 +12,7 @@ For the contents (members) of an advanced list to be synced successfully out of 
 ```js
 {
   "email": string, // valid email address for existing Google group in the workspace
+  "map-email-to": string // optional label of email column, defaults to "E-Mail"
   "update-name": boolean, // optional, defaults to `true`
   "delivery-settings": "ALL_MAIL"|"DAILY"|"DIGEST"|"DISABLED"|"NONE", // optional, defaults to "ALL_MAIL"
   "dangerously-purge-google-group-owners": boolean // optional, defaults to `false`
