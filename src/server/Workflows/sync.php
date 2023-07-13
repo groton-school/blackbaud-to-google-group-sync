@@ -122,7 +122,8 @@ try {
                 unset($bbMembers[$gMember->getEmail()]);
                 if ($gMember->getDeliverySettings() != $deliverySettings) {
                     $listProgress->setStatus(
-                        "Setting {$gMember->email} delivery settings to $deliverySettings"
+                        "Setting {$gMember->email} delivery settings to $deliverySettings",
+                        [$gMember->getDeliverySettings() => $deliverySettings]
                     );
                     $gMember->setDeliverySettings($deliverySettings);
                 }
