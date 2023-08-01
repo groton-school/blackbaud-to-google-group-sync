@@ -3,7 +3,6 @@ import gcloud from '@battis/partly-gcloudy';
 import cli from '@battis/qui-cli';
 import fs from 'fs';
 import path from 'path';
-import process from 'process';
 import options from './options.mjs';
 
 async function guideGoogleWorkspaceAdminDelegation({ email, uniqueId }) {
@@ -61,7 +60,12 @@ async function guideBlackbaudAppCreation({
   const args = gcloud.init({
     args: {
       options,
-      flags: { verbose: { short: 'v' } }
+      flags: {
+        deploy: {
+          description:
+            'Include the (time-consuming) deploy step to App Engine (default true, --no-deploy to skip)'
+        }
+      }
     }
   });
   if (args.values.verbose) {
@@ -69,14 +73,18 @@ async function guideBlackbaudAppCreation({
   }
 
   if (gcloud.ready()) {
-    // create new project (or reuse existing)
-    const project = await gcloud.project.create({
+    const { project, appEngine } = await gcloud.batch.appEnginePublish({
       name: args.values.name,
-      id: args.values.project || process.env.PROJECT
+      id: args.values.project,
+      suggestedName: 'Blackbaud-to-Google Group Sync',
+      billingAccountId: args.values.billing,
+      region: args.values.region,
+      env: { keys: { urlVar: 'URL' } },
+      prebuild: () => {
+        return true;
+      },
+      deploy: args.values.deploy
     });
-
-    // enable billing to allow enabling services later
-    await gcloud.billing.enable({ accountId: args.values.billing });
 
     // define a Google Workspace admin who will delegate their access to the Admin SDK API to manage Google Groups
     args.values.delegatedAdmin =
@@ -88,8 +96,7 @@ async function guideBlackbaudAppCreation({
       }));
     await gcloud.iam.addPolicyBinding({
       user: args.values.delegatedAdmin,
-      role: 'roles/owner',
-      userType: 'user'
+      role: google.iam.Roles.Owner
     });
     const delegate = await gcloud.iam.createServiceAccount({
       displayName: 'Google Workspace Admin Delegate',
@@ -111,28 +118,6 @@ async function guideBlackbaudAppCreation({
       email: path.basename(delegate.name),
       uniqueId: delegate.uniqueId
     });
-
-    // enable App Engine for the project
-    const appEngine = await gcloud.appEngine.create({
-      region: args.values.region,
-      writeDotEnvFile: true
-    });
-
-    // write .env file if necessary (backing up any existing .env files)
-    const url = `https://${appEngine.defaultHostname}`;
-    if (project.projectid !== process.env.PROJECT || url !== process.env.URL) {
-      const envPath = path.resolve(cli.appRoot(), '.env');
-      if (fs.existsSync(envPath)) {
-        let i;
-        for (i = 1; fs.existsSync(`${envPath}.${i}`); i++);
-        fs.renameSync(envPath, `${envPath}.${i}`);
-      }
-      fs.writeFileSync(
-        envPath,
-        `PROJECT=${project.projectId}
-URL=${url}`
-      );
-    }
 
     // must create an instance so that IAP can be configured
     if (!args.values.built) {

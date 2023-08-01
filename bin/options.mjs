@@ -1,7 +1,4 @@
 export default {
-  project: {
-    description: 'Google Cloud project unique identifier'
-  },
   name: {
     description: 'Google Cloud project name',
     default: 'Blackbaud-to-Google Group Sync'
