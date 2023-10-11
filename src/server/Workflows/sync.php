@@ -1,6 +1,7 @@
 <?php
 
 use Google\Service\Directory;
+use Google\Service\Directory\Group as DirectoryGroup;
 use Google\Service\Directory\Member as DirectoryMember;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Group;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
@@ -46,7 +47,7 @@ try {
     $school = SKY::api()->endpoint('school/v1');
     $lists = array_filter(
         $school->get('lists')['value'],
-        fn($list) => $list['category'] == APP_NAME
+        fn ($list) => $list['category'] == APP_NAME
     );
     $progress->setMax(count($lists));
     foreach ($lists as $list) {
@@ -120,13 +121,29 @@ try {
             /** @var DirectoryMember $gMember */
             if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                 unset($bbMembers[$gMember->getEmail()]);
-                if ($gMember->getDeliverySettings() != $deliverySettings) {
-                    $listProgress->setStatus(
-                        "Setting {$gMember->email} delivery settings to $deliverySettings",
-                        [$gMember->getDeliverySettings() => $deliverySettings]
-                    );
-                    $gMember->setDeliverySettings($deliverySettings);
-                }
+            /*
+             * TODO #42
+             *   Appears that listMembers() returns an array of Member-like
+             *   objects, but not actually members. They are missing the
+             *   `delivery_settings` field. Which means that to get the
+             *   delivery settings for each member, each member would need to
+             *   be individually queried per group, which is prohibitively
+             *   resource expensive.
+             */
+                /*
+            if ($gMember->getDeliverySettings() != $deliverySettings) {
+                $oldDeliverySettings = $gMember->getDeliverySettings();
+                $gMember->setDeliverySettings($deliverySettings);
+                $gMember = $directory->members->update(
+                    $bbGroup->getParamEmail(),
+                    $gMember->getId(),
+                    $gMember
+                );
+                $listProgress->setStatus(
+                    "Updated {$gMember->email} delivery_settings from to '{$gMember->getDeliverySettings()}'"
+                );
+            }
+            */
             } else {
                 if (
                     ($gMember->getRole() !== 'OWNER' ||
@@ -222,7 +239,7 @@ try {
         $progress->increment();
         $progress->removeChild($listProgress);
     }
-    Async::result(fn() => $progress->setStatus('complete'));
+    Async::result(fn () => $progress->setStatus('complete'));
 } catch (Exception $e) {
-    Async::error(fn() => $progress->exception($e));
+    Async::error(fn () => $progress->exception($e));
 }

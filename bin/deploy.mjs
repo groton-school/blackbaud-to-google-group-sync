@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 import gcloud from '@battis/partly-gcloudy';
 gcloud.init();
-gcloud.app.deploy();
+await gcloud.app.deploy();
 console.log('Deploy complete.');
