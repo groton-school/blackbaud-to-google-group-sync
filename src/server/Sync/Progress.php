@@ -167,6 +167,7 @@ class Progress implements JsonSerializable
             array_merge(
                 $this->defaultContext,
                 [
+                    'isError' => true,
                     'code' => $e->getCode(),
                     'file' => $e->getFile(),
                     'line' => $e->getLine(),

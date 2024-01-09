@@ -208,7 +208,10 @@ try {
                 $listProgress->log(
                     Level::Warning,
                     $error['message'],
-                    array_merge(['email' => $bbMember->getEmail()], $error)
+                    array_merge(
+                        ['email' => $bbMember->getEmail(), 'isError' => true],
+                        $error
+                    )
                 );
                 $errors++;
             }
@@ -221,7 +224,8 @@ try {
                 ($errors === 1 ? '' : 's') .
                 " adding and removing members of '" .
                 $bbGroup->getParamEmail() .
-                "'"
+                "'",
+            ['isError' => $errors > 0]
         );
 
         if ($bbGroup->getParamUpdateName()) {
