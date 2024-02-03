@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import options from './options.mjs';
 import gcloud from '@battis/partly-gcloudy';
 import cli from '@battis/qui-cli';
 import fs from 'fs';
 import path from 'path';
-import options from './options.mjs';
 
 async function guideGoogleWorkspaceAdminDelegation({ email, uniqueId }) {
   await cli.prompts.confirm({
@@ -57,7 +57,7 @@ async function guideBlackbaudAppCreation({
 }
 
 (async () => {
-  const args = gcloud.init({
+  const args = await gcloud.init({
     args: {
       options,
       flags: {
