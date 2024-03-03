@@ -4,25 +4,110 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b62df7fcff653998162835a00d692a8e",
+    "content-hash": "720f153cf0608933162aaee098a10e51",
     "packages": [
         {
-            "name": "battis/lazy-secrets",
-            "version": "v0.2",
+            "name": "battis/data-utilities",
+            "version": "v1.2.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/battis/lazy-secrets.git",
-                "reference": "3e3c1a7e9e1c0166e7570d20b280fced1fed07b6"
+                "url": "https://github.com/battis/data-utilities.git",
+                "reference": "9bf8dc8385a8563b2a7a6534eedd3c359acb90de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/battis/lazy-secrets/zipball/3e3c1a7e9e1c0166e7570d20b280fced1fed07b6",
-                "reference": "3e3c1a7e9e1c0166e7570d20b280fced1fed07b6",
+                "url": "https://api.github.com/repos/battis/data-utilities/zipball/9bf8dc8385a8563b2a7a6534eedd3c359acb90de",
+                "reference": "9bf8dc8385a8563b2a7a6534eedd3c359acb90de",
                 "shasum": ""
             },
             "require": {
-                "google/cloud-secret-manager": "^1.9"
+                "battis/hydratable": "^0.1"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^11.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Battis\\DataUtilities\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Seth Battis",
+                    "email": "sethbattis@stmarksschool.org"
+                }
+            ],
+            "description": "A handful of useful helper functions to process data",
+            "support": {
+                "issues": "https://github.com/battis/data-utilities/issues",
+                "source": "https://github.com/battis/data-utilities/tree/v1.2.6"
+            },
+            "time": "2024-02-18T20:14:24+00:00"
+        },
+        {
+            "name": "battis/hydratable",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/battis/hydratable.git",
+                "reference": "a8ab2428b070dbe1f2143c7783898237727f3c79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/battis/hydratable/zipball/a8ab2428b070dbe1f2143c7783898237727f3c79",
+                "reference": "a8ab2428b070dbe1f2143c7783898237727f3c79",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Battis\\Hydratable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Seth Battis",
+                    "email": "seth@battis.net"
+                }
+            ],
+            "description": "Hydrate serialized objects with defaults and overrides",
+            "support": {
+                "issues": "https://github.com/battis/hydratable/issues",
+                "source": "https://github.com/battis/hydratable/tree/v0.1.1"
+            },
+            "time": "2023-07-04T21:21:58+00:00"
+        },
+        {
+            "name": "battis/lazy-secrets",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/battis/lazy-secrets.git",
+                "reference": "fa92a5280215f8d9c544c0a18a6b8bf3d22a36df"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/battis/lazy-secrets/zipball/fa92a5280215f8d9c544c0a18a6b8bf3d22a36df",
+                "reference": "fa92a5280215f8d9c544c0a18a6b8bf3d22a36df",
+                "shasum": ""
+            },
+            "require": {
+                "google/cloud-secret-manager": "^1.9",
+                "psr/simple-cache": "^3.0"
+            },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -42,46 +127,9 @@
             "description": "A (thin) wrapper for google/cloud-secret-manager to reduce boilerplate",
             "support": {
                 "issues": "https://github.com/battis/lazy-secrets/issues",
-                "source": "https://github.com/battis/lazy-secrets/tree/v0.2"
+                "source": "https://github.com/battis/lazy-secrets/tree/main"
             },
-            "time": "2023-06-01T19:59:53+00:00"
-        },
-        {
-            "name": "battis/path",
-            "version": "v0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/battis/Path.git",
-                "reference": "2bc6eb940d4a3317450210999a635ff4dd1d4d7c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/battis/Path/zipball/2bc6eb940d4a3317450210999a635ff4dd1d4d7c",
-                "reference": "2bc6eb940d4a3317450210999a635ff4dd1d4d7c",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Battis\\Path\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Seth Battis",
-                    "email": "seth@battis.net"
-                }
-            ],
-            "description": "Path manipulation toolbox",
-            "support": {
-                "issues": "https://github.com/battis/Path/issues",
-                "source": "https://github.com/battis/Path/tree/v0.1"
-            },
-            "time": "2021-12-18T23:47:33+00:00"
+            "time": "2024-03-03T21:38:23+00:00"
         },
         {
             "name": "brick/math",
@@ -353,16 +401,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.333.1",
+            "version": "v0.337.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "f82f631755771082cc9070592b82596b359ce6da"
+                "reference": "0f2a9a00c91a903b2f30f4f531a09af948df384e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/f82f631755771082cc9070592b82596b359ce6da",
-                "reference": "f82f631755771082cc9070592b82596b359ce6da",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/0f2a9a00c91a903b2f30f4f531a09af948df384e",
+                "reference": "0f2a9a00c91a903b2f30f4f531a09af948df384e",
                 "shasum": ""
             },
             "require": {
@@ -391,9 +439,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.333.1"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.337.0"
             },
-            "time": "2024-01-29T01:16:44+00:00"
+            "time": "2024-02-26T01:00:27+00:00"
         },
         {
             "name": "google/appengine-php-sdk",
@@ -467,16 +515,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.35.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "6e9c9fd4e2bbd7042f50083076346e4a1eff4e4b"
+                "reference": "5f16f67375b6f202b857183d7ef4e076acd7d4aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/6e9c9fd4e2bbd7042f50083076346e4a1eff4e4b",
-                "reference": "6e9c9fd4e2bbd7042f50083076346e4a1eff4e4b",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/5f16f67375b6f202b857183d7ef4e076acd7d4aa",
+                "reference": "5f16f67375b6f202b857183d7ef4e076acd7d4aa",
                 "shasum": ""
             },
             "require": {
@@ -519,27 +567,27 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.35.0"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.37.0"
             },
-            "time": "2024-02-01T20:41:08+00:00"
+            "time": "2024-02-21T17:03:52+00:00"
         },
         {
             "name": "google/cloud-secret-manager",
-            "version": "v1.13.0",
+            "version": "v1.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-secret-manager.git",
-                "reference": "72148c97283ecc0ddff2ae95be2a5e50dbc087a7"
+                "reference": "aa84959f29b22e4edb481502fb945cd56a66ef02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-secret-manager/zipball/72148c97283ecc0ddff2ae95be2a5e50dbc087a7",
-                "reference": "72148c97283ecc0ddff2ae95be2a5e50dbc087a7",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-secret-manager/zipball/aa84959f29b22e4edb481502fb945cd56a66ef02",
+                "reference": "aa84959f29b22e4edb481502fb945cd56a66ef02",
                 "shasum": ""
             },
             "require": {
-                "google/gax": "^1.26.0",
-                "php": ">=7.4"
+                "google/gax": "^1.30",
+                "php": "^8.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.0"
@@ -570,9 +618,9 @@
             ],
             "description": "Secret Manager Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-secret-manager/tree/v1.13.0"
+                "source": "https://github.com/googleapis/google-cloud-php-secret-manager/tree/v1.13.2"
             },
-            "time": "2024-01-05T17:34:35+00:00"
+            "time": "2024-03-01T11:25:35+00:00"
         },
         {
             "name": "google/common-protos",
@@ -628,35 +676,36 @@
         },
         {
             "name": "google/gax",
-            "version": "v1.26.3",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/gax-php.git",
-                "reference": "b7c782dcc40957ad84c9da947cc201f42e97859e"
+                "reference": "25fb6fe93f8a871d7c626dc4599a481d9ebb6b02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/b7c782dcc40957ad84c9da947cc201f42e97859e",
-                "reference": "b7c782dcc40957ad84c9da947cc201f42e97859e",
+                "url": "https://api.github.com/repos/googleapis/gax-php/zipball/25fb6fe93f8a871d7c626dc4599a481d9ebb6b02",
+                "reference": "25fb6fe93f8a871d7c626dc4599a481d9ebb6b02",
                 "shasum": ""
             },
             "require": {
                 "google/auth": "^1.34.0",
                 "google/common-protos": "^4.4",
-                "google/grpc-gcp": "^0.2||^0.3",
+                "google/grpc-gcp": "^0.3",
                 "google/longrunning": "~0.2",
                 "google/protobuf": "^3.22",
                 "grpc/grpc": "^1.13",
-                "guzzlehttp/promises": "^1.4||^2.0",
+                "guzzlehttp/promises": "^2.0",
                 "guzzlehttp/psr7": "^2.0",
-                "php": ">=7.4"
+                "php": "^8.0",
+                "ramsey/uuid": "^4.0"
             },
             "conflict": {
                 "ext-protobuf": "<3.7.0"
             },
             "require-dev": {
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.0",
+                "phpspec/prophecy-phpunit": "^2.1",
+                "phpunit/phpunit": "^9.6",
                 "squizlabs/php_codesniffer": "3.*"
             },
             "type": "library",
@@ -677,9 +726,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/gax-php/issues",
-                "source": "https://github.com/googleapis/gax-php/tree/v1.26.3"
+                "source": "https://github.com/googleapis/gax-php/tree/v1.30.0"
             },
-            "time": "2024-01-18T20:24:45+00:00"
+            "time": "2024-02-28T20:33:41+00:00"
         },
         {
             "name": "google/grpc-gcp",
@@ -728,20 +777,20 @@
         },
         {
             "name": "google/longrunning",
-            "version": "0.3.0",
+            "version": "0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/php-longrunning.git",
-                "reference": "c21cb8f8794f724ca672dad94bf7d406e62476b9"
+                "reference": "a974fe870d5f57cc21da697923a1f4e8d08829c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/php-longrunning/zipball/c21cb8f8794f724ca672dad94bf7d406e62476b9",
-                "reference": "c21cb8f8794f724ca672dad94bf7d406e62476b9",
+                "url": "https://api.github.com/repos/googleapis/php-longrunning/zipball/a974fe870d5f57cc21da697923a1f4e8d08829c9",
+                "reference": "a974fe870d5f57cc21da697923a1f4e8d08829c9",
                 "shasum": ""
             },
             "require-dev": {
-                "google/gax": "^1.26.0",
+                "google/gax": "^1.30",
                 "phpunit/phpunit": "^9.0"
             },
             "type": "library",
@@ -766,22 +815,22 @@
             ],
             "description": "Google LongRunning Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/php-longrunning/tree/v0.3.0"
+                "source": "https://github.com/googleapis/php-longrunning/tree/v0.3.1"
             },
-            "time": "2024-01-05T17:46:51+00:00"
+            "time": "2024-03-01T11:25:35+00:00"
         },
         {
             "name": "google/protobuf",
-            "version": "v3.25.2",
+            "version": "v3.25.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "83ea4c147718666ce6a9b9332ac2aa588c9211eb"
+                "reference": "983a87f4f8798a90ca3a25b0f300b8fda38df643"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/83ea4c147718666ce6a9b9332ac2aa588c9211eb",
-                "reference": "83ea4c147718666ce6a9b9332ac2aa588c9211eb",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/983a87f4f8798a90ca3a25b0f300b8fda38df643",
+                "reference": "983a87f4f8798a90ca3a25b0f300b8fda38df643",
                 "shasum": ""
             },
             "require": {
@@ -810,26 +859,26 @@
                 "proto"
             ],
             "support": {
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.25.2"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.25.3"
             },
-            "time": "2024-01-09T22:12:32+00:00"
+            "time": "2024-02-15T21:11:49+00:00"
         },
         {
             "name": "groton-school/oauth2-blackbaudsky",
-            "version": "v0.2.2",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/groton-school/OAuth2-BlackbaudSKY.git",
-                "reference": "4c5a46f6829b1256bd8b3eadf236225c21553deb"
+                "reference": "1955ea4c9125b15ac205235b65ae88f1b0e508b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/groton-school/OAuth2-BlackbaudSKY/zipball/4c5a46f6829b1256bd8b3eadf236225c21553deb",
-                "reference": "4c5a46f6829b1256bd8b3eadf236225c21553deb",
+                "url": "https://api.github.com/repos/groton-school/OAuth2-BlackbaudSKY/zipball/1955ea4c9125b15ac205235b65ae88f1b0e508b8",
+                "reference": "1955ea4c9125b15ac205235b65ae88f1b0e508b8",
                 "shasum": ""
             },
             "require": {
-                "battis/path": "^0.1.0",
+                "battis/data-utilities": "^1.2",
                 "ext-curl": "*",
                 "guzzlehttp/guzzle": "^7.4",
                 "league/oauth2-client": "^2.6"
@@ -853,9 +902,9 @@
             "description": "This package provides Blackbaud SKY OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
             "support": {
                 "issues": "https://github.com/groton-school/OAuth2-BlackbaudSKY/issues",
-                "source": "https://github.com/groton-school/OAuth2-BlackbaudSKY/tree/v0.2.2"
+                "source": "https://github.com/groton-school/OAuth2-BlackbaudSKY/tree/v0.2.5"
             },
-            "time": "2023-10-03T13:19:12+00:00"
+            "time": "2024-02-12T14:32:41+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -1571,16 +1620,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.35",
+            "version": "3.0.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "4b1827beabce71953ca479485c0ae9c51287f2fe"
+                "reference": "cfa2013d0f68c062055180dd4328cc8b9d1f30b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/4b1827beabce71953ca479485c0ae9c51287f2fe",
-                "reference": "4b1827beabce71953ca479485c0ae9c51287f2fe",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/cfa2013d0f68c062055180dd4328cc8b9d1f30b8",
+                "reference": "cfa2013d0f68c062055180dd4328cc8b9d1f30b8",
                 "shasum": ""
             },
             "require": {
@@ -1661,7 +1710,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.35"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.37"
             },
             "funding": [
                 {
@@ -1677,7 +1726,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-29T01:59:53+00:00"
+            "time": "2024-03-03T02:14:58+00:00"
         },
         {
             "name": "psr/cache",
@@ -1937,6 +1986,57 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.0"
             },
             "time": "2021-07-14T16:46:02+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/simple-cache/tree/3.0.0"
+            },
+            "time": "2021-10-29T13:26:27+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -2234,7 +2334,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "battis/lazy-secrets": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

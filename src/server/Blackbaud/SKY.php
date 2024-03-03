@@ -4,7 +4,7 @@ namespace GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud;
 
 use Exception;
 use Google\AppEngine\Api\Memcache\Memcached;
-use Battis\LazySecrets\Secrets;
+use Battis\LazySecrets\Cache;
 use League\OAuth2\Client\Token\AccessToken;
 use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
 
@@ -29,18 +29,29 @@ class SKY
 
     private static ?Memcached $cache = null;
     private static ?BlackbaudSKY $api = null;
+    private static ?Cache $secrets = null;
 
     public static function api()
     {
         if (!self::$api) {
             self::$api = new BlackbaudSKY([
-                BlackbaudSKY::ACCESS_KEY => Secrets::get(self::Bb_ACCESS_KEY),
-                'clientId' => Secrets::get(self::Bb_CLIENT_ID),
-                'clientSecret' => Secrets::get(self::Bb_CLIENT_SECRET),
-                'redirectUri' => Secrets::get(self::Bb_REDIRECT_URL),
+                BlackbaudSKY::ACCESS_KEY => self::secrets()->get(
+                    self::Bb_ACCESS_KEY
+                ),
+                'clientId' => self::secrets()->get(self::Bb_CLIENT_ID),
+                'clientSecret' => self::secrets()->get(self::Bb_CLIENT_SECRET),
+                'redirectUri' => self::secrets()->get(self::Bb_REDIRECT_URL),
             ]);
         }
         return self::$api;
+    }
+
+    private static function secrets()
+    {
+        if (!self::$secrets) {
+            self::$secrets = new Cache($_ENV['GOOGLE_CLOUD_PROJECT']);
+        }
+        return self::$secrets;
     }
 
     private static function cache()
@@ -57,7 +68,7 @@ class SKY
         $get,
         $interactive = true
     ) {
-        $cachedToken = Secrets::get(self::Bb_TOKEN, true);
+        $cachedToken = self::secrets()->get(self::Bb_TOKEN, true);
         $token = $cachedToken ? new AccessToken($cachedToken) : null;
 
         // acquire a Bb SKY API access token
@@ -93,7 +104,7 @@ class SKY
                             self::CODE => $get[self::CODE],
                         ]
                     );
-                    Secrets::set(self::Bb_TOKEN, $token);
+                    self::secrets()->set(self::Bb_TOKEN, $token, 3600);
                 }
             } else {
                 return null;
@@ -104,7 +115,7 @@ class SKY
                 self::REFRESH_TOKEN => $token->getRefreshToken(),
             ]);
             // FIXME need to handle _not_ being able to refresh!
-            Secrets::set(self::Bb_TOKEN, $newToken);
+            self::secrets()->set(self::Bb_TOKEN, $newToken, 3600);
             $token = $newToken;
         } else {
             self::api()->setAccessToken($token);

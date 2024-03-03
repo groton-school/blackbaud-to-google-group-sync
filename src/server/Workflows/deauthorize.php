@@ -2,8 +2,9 @@
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-use Battis\LazySecrets\Secrets;
+use Battis\LazySecrets\Cache;
 
-Secrets::set('BLACKBAUD_API_TOKEN', json_encode(null));
+$secrets = new Cache($_ENV['GOOGLE_CLOUD_PROJECT']);
+$secrets->delete('BLACKBAUD_API_TOKEN', json_encode(null));
 
 echo json_encode(['status' => 'deauthorized']);
