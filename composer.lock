@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "720f153cf0608933162aaee098a10e51",
+    "content-hash": "d1859e959167c681148ce921ef053383",
     "packages": [
         {
             "name": "battis/data-utilities",
@@ -91,7 +91,7 @@
         },
         {
             "name": "battis/lazy-secrets",
-            "version": "dev-main",
+            "version": "v1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/battis/lazy-secrets.git",
@@ -107,7 +107,6 @@
                 "google/cloud-secret-manager": "^1.9",
                 "psr/simple-cache": "^3.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -127,7 +126,7 @@
             "description": "A (thin) wrapper for google/cloud-secret-manager to reduce boilerplate",
             "support": {
                 "issues": "https://github.com/battis/lazy-secrets/issues",
-                "source": "https://github.com/battis/lazy-secrets/tree/main"
+                "source": "https://github.com/battis/lazy-secrets/tree/v1.0"
             },
             "time": "2024-03-03T21:38:23+00:00"
         },
@@ -2334,9 +2333,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "battis/lazy-secrets": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
