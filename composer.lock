@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1859e959167c681148ce921ef053383",
+    "content-hash": "720f153cf0608933162aaee098a10e51",
     "packages": [
         {
             "name": "battis/data-utilities",
@@ -91,22 +91,23 @@
         },
         {
             "name": "battis/lazy-secrets",
-            "version": "v1.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/battis/lazy-secrets.git",
-                "reference": "fa92a5280215f8d9c544c0a18a6b8bf3d22a36df"
+                "reference": "74e00f5eeb27c4af94bb18733b779035c94c8244"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/battis/lazy-secrets/zipball/fa92a5280215f8d9c544c0a18a6b8bf3d22a36df",
-                "reference": "fa92a5280215f8d9c544c0a18a6b8bf3d22a36df",
+                "url": "https://api.github.com/repos/battis/lazy-secrets/zipball/74e00f5eeb27c4af94bb18733b779035c94c8244",
+                "reference": "74e00f5eeb27c4af94bb18733b779035c94c8244",
                 "shasum": ""
             },
             "require": {
                 "google/cloud-secret-manager": "^1.9",
                 "psr/simple-cache": "^3.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -126,9 +127,9 @@
             "description": "A (thin) wrapper for google/cloud-secret-manager to reduce boilerplate",
             "support": {
                 "issues": "https://github.com/battis/lazy-secrets/issues",
-                "source": "https://github.com/battis/lazy-secrets/tree/v1.0"
+                "source": "https://github.com/battis/lazy-secrets/tree/main"
             },
-            "time": "2024-03-03T21:38:23+00:00"
+            "time": "2024-03-05T19:23:50+00:00"
         },
         {
             "name": "brick/math",
@@ -400,16 +401,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.337.0",
+            "version": "v0.338.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "0f2a9a00c91a903b2f30f4f531a09af948df384e"
+                "reference": "52aeb042c8d30ac0f98f4051dd4bc523708b1306"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/0f2a9a00c91a903b2f30f4f531a09af948df384e",
-                "reference": "0f2a9a00c91a903b2f30f4f531a09af948df384e",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/52aeb042c8d30ac0f98f4051dd4bc523708b1306",
+                "reference": "52aeb042c8d30ac0f98f4051dd4bc523708b1306",
                 "shasum": ""
             },
             "require": {
@@ -438,9 +439,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.337.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.338.0"
             },
-            "time": "2024-02-26T01:00:27+00:00"
+            "time": "2024-03-03T00:56:15+00:00"
         },
         {
             "name": "google/appengine-php-sdk",
@@ -2333,7 +2334,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "battis/lazy-secrets": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

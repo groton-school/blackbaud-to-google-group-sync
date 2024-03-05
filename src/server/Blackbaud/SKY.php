@@ -104,7 +104,7 @@ class SKY
                             self::CODE => $get[self::CODE],
                         ]
                     );
-                    self::secrets()->set(self::Bb_TOKEN, $token, 3600);
+                    self::secrets()->set(self::Bb_TOKEN, $token, 1);
                 }
             } else {
                 return null;
@@ -115,7 +115,7 @@ class SKY
                 self::REFRESH_TOKEN => $token->getRefreshToken(),
             ]);
             // FIXME need to handle _not_ being able to refresh!
-            self::secrets()->set(self::Bb_TOKEN, $newToken, 3600);
+            self::secrets()->set(self::Bb_TOKEN, $newToken, 1);
             $token = $newToken;
         } else {
             self::api()->setAccessToken($token);
