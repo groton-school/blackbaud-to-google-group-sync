@@ -2,7 +2,7 @@
 
 namespace GrotonSchool\BlackbaudToGoogleGroupSync\Google;
 
-use Battis\LazySecrets\Secrets;
+use Battis\LazySecrets\Cache;
 use Exception;
 use Google\Client;
 
@@ -30,11 +30,12 @@ class Google
                 );
             }
             self::$api = new Client();
+            $secrets = new Cache();
             self::$api->setApplicationName(self::$appName);
             self::$api->setAuthConfig(
-                Secrets::get(self::Google_CREDENTIALS, true)
+                $secrets->get(self::Google_CREDENTIALS, true)
             );
-            self::$api->setSubject(Secrets::get(self::Google_DELEGATED_ADMIN));
+            self::$api->setSubject($secrets->get(self::Google_DELEGATED_ADMIN));
             self::$api->setScopes([
                 'https://www.googleapis.com/auth/admin.directory.group',
             ]);
