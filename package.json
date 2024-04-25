@@ -22,9 +22,9 @@
     "@battis/prettier-config": "latest",
     "@battis/qui-cli": "^0.3.9",
     "@battis/webpack": "latest",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.6",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   },
   "prettier": "@battis/prettier-config",
   "eslintConfig": {
