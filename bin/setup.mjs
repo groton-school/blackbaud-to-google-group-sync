@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import options from './options.mjs';
+import options from './options.json' assert {type: 'json'};
 import gcloud from '@battis/partly-gcloudy';
 import cli from '@battis/qui-cli';
 import fs from 'fs';
@@ -131,7 +131,8 @@ async function guideBlackbaudAppCreation({
     await gcloud.iap.enable({
       applicationTitle: project.name,
       supportEmail: args.values.supportEmail,
-      users: args.values.users
+      users: args.values.users,
+      project
     });
 
     // guide storage of Blackbaud credentials in Secret Manager, SKY App creation and configuration
