@@ -51,4 +51,4 @@ Note that the `Group ID` value can be gleaned from the URL of the group's, for e
 https://groton.myschoolapp.com/app/extracurricular#communitypage/96351172/roster
 ```
 
-...where the ID is the mumerical value.
+...where the ID is the numerical value.

@@ -1,7 +1,4 @@
 {
-  "name": "blackbaud-to-google-group-sync",
-  "description": "Sync membership of Blackbaud LMS community groups to Google Groups",
-  "version": "0.1.0",
   "scripts": {
     "setup": "./bin/setup.mjs",
     "build": "webpack",
@@ -11,11 +8,6 @@
     "logs": "./bin/logs.mjs",
     "update": "pnpm up; npm up --lock-file-only"
   },
-  "author": {
-    "name": "Seth Battis",
-    "url": "https://github.com/groton-school"
-  },
-  "license": "GPL-3.0",
   "devDependencies": {
     "@battis/eslint-config": "latest",
     "@battis/partly-gcloudy": "^0.4.3",
