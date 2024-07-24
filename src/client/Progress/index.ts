@@ -126,8 +126,9 @@ function poll(statusEndpoint: string, progress?: ProgressResponse) {
       .then((progress: ProgressResponse) => poll(statusEndpoint, progress));
   } else {
     Messages.add({
-      message: `<strong>Sync complete.</strong> ${Object.values(progressBars)[0].ariaValueMax
-        } groups synced from Blackbaud to Google at ${new Date().toLocaleString()}.`,
+      message: `<strong>Sync complete.</strong> ${
+        Object.values(progressBars)[0].ariaValueMax
+      } groups synced from Blackbaud to Google at ${new Date().toLocaleString()}.`,
       dismissable: true,
       variant: 'success'
     });

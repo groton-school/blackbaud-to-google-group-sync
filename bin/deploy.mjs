@@ -3,6 +3,7 @@ import gcloud from '@battis/partly-gcloudy';
 import cli from '@battis/qui-cli';
 
 await gcloud.init();
+cli.init();
 try {
   await gcloud.batch.appEngineDeployAndCleanup({ retainVersions: 2 });
   cli.log.info('Deploy complete.');

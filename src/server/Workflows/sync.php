@@ -1,7 +1,6 @@
 <?php
 
 use Google\Service\Directory;
-use Google\Service\Directory\Group as DirectoryGroup;
 use Google\Service\Directory\Member as DirectoryMember;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Group;
 use GrotonSchool\BlackbaudToGoogleGroupSync\Blackbaud\Member;
@@ -45,10 +44,10 @@ try {
     $directory = new Directory(Google::api());
 
     $school = SKY::api()->endpoint('school/v1');
-    $lists = array_filter(
-        $school->get('lists')['value'],
-        fn ($list) => $list['category'] == APP_NAME
-    );
+    $lists = array_filter($school->get('lists')['value'], function ($list) {
+        $json = json_decode($list['description'], true);
+        return $json && $json['bb2gg'] === true;
+    });
     $progress->setMax(count($lists));
     foreach ($lists as $list) {
         $bbGroup = new Group($list);
@@ -121,15 +120,15 @@ try {
             /** @var DirectoryMember $gMember */
             if (array_key_exists($gMember->getEmail(), $bbMembers)) {
                 unset($bbMembers[$gMember->getEmail()]);
-            /*
-             * TODO #42
-             *   Appears that listMembers() returns an array of Member-like
-             *   objects, but not actually members. They are missing the
-             *   `delivery_settings` field. Which means that to get the
-             *   delivery settings for each member, each member would need to
-             *   be individually queried per group, which is prohibitively
-             *   resource expensive.
-             */
+                /*
+                 * TODO #42
+                 *   Appears that listMembers() returns an array of Member-like
+                 *   objects, but not actually members. They are missing the
+                 *   `delivery_settings` field. Which means that to get the
+                 *   delivery settings for each member, each member would need to
+                 *   be individually queried per group, which is prohibitively
+                 *   resource expensive.
+                 */
                 /*
             if ($gMember->getDeliverySettings() != $deliverySettings) {
                 $oldDeliverySettings = $gMember->getDeliverySettings();

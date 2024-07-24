@@ -6,7 +6,7 @@ The original idea of this tool was to try to directly sync membership in Blackba
 
 At present we use this tool mostly _without_ matching community groups in our SIS, but instead syncing Advanced Lists that align with user Roles within the SIS (for example, all users who are Students, or Coaches, or members of a particular graduating class or in a particular department). Each of these synced roles just requires an Advanced List to select the users, with [some JSON-formatted comments](./docs/blackbaud-advanced-list-config.md) to direct it to a specific Google Group.
 
-The app itself runs in a Google App Engine instance, and schedules itself to run nightly to automatically sync any groups that it finds in the `Blackbaud to Google Groups Sync` category in the SIS Advanced Lists.
+The app itself runs in a Google App Engine instance, and schedules itself to run nightly to automatically sync any advanced lists that it finds whose descriptions can a) be parsed as valid JSON and b) contain a field `bb2gg` set to `true` (`{"bb2gg": true}`) into specified Google Groups.
 
 ## Caution
 
