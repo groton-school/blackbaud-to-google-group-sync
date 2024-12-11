@@ -12,8 +12,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(@eslint/js@8.57.0)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-plugin-html@7.1.0)(eslint-plugin-markdown@3.0.1(eslint@8.57.0))(eslint@8.57.0)(globals@13.24.0)(typescript-eslint@8.18.0(eslint@8.57.0)(typescript@5.7.2))(typescript@5.7.2)
       '@battis/partly-gcloudy':
-        specifier: ^0.4.5
-        version: 0.4.5
+        specifier: ^0.6.0
+        version: 0.6.0
       '@battis/prettier-config':
         specifier: ^1.5.5
         version: 1.5.5(typescript@5.7.2)
@@ -108,8 +108,8 @@ packages:
       typescript: '*'
       typescript-eslint: '*'
 
-  '@battis/partly-gcloudy@0.4.5':
-    resolution: {integrity: sha512-zl50LwPoLuQiKwtCmEbrJYnsr4OZGCqYKKMQLxeSaf9Cct+AEJsm0bPj08HLPLL2UZlci2KGC5qkQ6GKMcrnfw==}
+  '@battis/partly-gcloudy@0.6.0':
+    resolution: {integrity: sha512-BndLD/Z/vjxEmg50Osc3FiZnMLM5+Jxgh5hMhvpg4UJ6dMI1/Sms56lVlg3ie4Hz5dAP23o82TIYGVzE30QOog==}
     engines: {node: '>=12.17'}
 
   '@battis/prettier-config@1.5.5':
@@ -4737,7 +4737,7 @@ snapshots:
       typescript: 5.7.2
       typescript-eslint: 8.18.0(eslint@8.57.0)(typescript@5.7.2)
 
-  '@battis/partly-gcloudy@0.4.5':
+  '@battis/partly-gcloudy@0.6.0':
     dependencies:
       '@battis/qui-cli': 0.4.2
       '@battis/typescript-tricks': 0.4.3
