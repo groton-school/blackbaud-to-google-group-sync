@@ -18,8 +18,8 @@ importers:
         specifier: ^1.5.5
         version: 1.5.5(typescript@5.7.2)
       '@battis/qui-cli':
-        specifier: ^0.8.4
-        version: 0.8.4
+        specifier: ^0.8.5
+        version: 0.8.5
       '@battis/webpack':
         specifier: latest
         version: 2.0.1(5wbpmxzzzzzqgy3gutbwotoase)
@@ -134,8 +134,8 @@ packages:
   '@battis/qui-cli.root@0.8.2':
     resolution: {integrity: sha512-QOW5urXUQsHp0pDvH3WDvsMIw8qqpg6/J0MZeRXQo08dRZYwt9cOGih8YP3fieHj4YgQ/qBa1KnmLOZCxnxfvw==}
 
-  '@battis/qui-cli.shell@0.8.2':
-    resolution: {integrity: sha512-6B7d4OBMWPGy9pMzfJ5gle97peunQcChtfYt3ul3VtFYCF931rCTLiriGW5X4ruzgBPKhVl4LLrUR49NxvLOCg==}
+  '@battis/qui-cli.shell@0.8.3':
+    resolution: {integrity: sha512-jB4vbFn0AZHE9JD5TlQ91lKl4ULkbfHbmSMApeix5lqrPNwrCtdct+70iuT0lVrAck05M+ITJs7E6xq8SAGVRw==}
 
   '@battis/qui-cli.validators@0.8.2':
     resolution: {integrity: sha512-KI+qLAyxMvMN9niB8i5o/DfhuOxENX3Wwalc11nep++1FMzSLUVVMmNptIvOde2ca2lhC7E3DGX8/TuZo1UlOQ==}
@@ -144,8 +144,8 @@ packages:
     resolution: {integrity: sha512-IiSLPNjSQ7HH8+kQwjEOTWhzJpXpiU4mxc1Jn5Prko/RUyzR5Gcahe/Y2sGy/N9TRXjNHjiQtErOaypw6OAMQw==}
     engines: {node: '>=12.17'}
 
-  '@battis/qui-cli@0.8.4':
-    resolution: {integrity: sha512-VKDugEnm17NHwWn593T/nknEZWXb14AsFEblERsBTb3zCiNmr5zgmqv+cfin0rJwLoMsuJBwImnd/CRSGwAWiQ==}
+  '@battis/qui-cli@0.8.5':
+    resolution: {integrity: sha512-wlVdp50i1meO6CIigHc+nLPNQyxn5sGE7h3J+tbQj3mUm8F6psJGHT3q1g78+ep+G9YmiUYMrm9kWmTlEs94sQ==}
     engines: {node: '>=12.17'}
 
   '@battis/typescript-tricks@0.4.3':
@@ -763,9 +763,6 @@ packages:
 
   '@types/node@20.17.9':
     resolution: {integrity: sha512-0JOXkRyLanfGPE2QRCwgxhzlBAvaRdCNMcvbd7jFfpmD4eEXll7LRwy5ymJmyeZqk7Nh7eD2LeUyQ68BbndmXw==}
-
-  '@types/node@22.10.1':
-    resolution: {integrity: sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==}
 
   '@types/node@22.10.2':
     resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
@@ -4836,7 +4833,7 @@ snapshots:
       '@battis/qui-cli.plugin': 0.1.2
       app-root-path: 3.1.0
 
-  '@battis/qui-cli.shell@0.8.2':
+  '@battis/qui-cli.shell@0.8.3':
     dependencies:
       '@battis/qui-cli.colors': 0.8.2
       '@battis/qui-cli.log': 0.8.2
@@ -4869,7 +4866,7 @@ snapshots:
       strip-ansi: 7.1.0
       winston: 3.17.0
 
-  '@battis/qui-cli@0.8.4':
+  '@battis/qui-cli@0.8.5':
     dependencies:
       '@battis/qui-cli.colors': 0.8.2
       '@battis/qui-cli.core': 0.8.4
@@ -4877,7 +4874,7 @@ snapshots:
       '@battis/qui-cli.log': 0.8.2
       '@battis/qui-cli.plugin': 0.1.2
       '@battis/qui-cli.root': 0.8.2
-      '@battis/qui-cli.shell': 0.8.2
+      '@battis/qui-cli.shell': 0.8.3
       '@battis/qui-cli.validators': 0.8.2
       '@inquirer/prompts': 2.3.1
       ora: 6.3.1
@@ -5365,7 +5362,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -5446,20 +5443,20 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.0.2
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/eslint-scope@3.7.7':
     dependencies:
@@ -5475,14 +5472,14 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.6':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
 
   '@types/express-serve-static-core@5.0.2':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -5500,7 +5497,7 @@ snapshots:
 
   '@types/http-proxy@1.17.15':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/istanbul-lib-coverage@2.0.6': {}
 
@@ -5516,7 +5513,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
     optional: true
 
   '@types/lodash@4.17.13': {}
@@ -5537,15 +5534,11 @@ snapshots:
 
   '@types/node-forge@1.3.11':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/node@20.17.9':
     dependencies:
       undici-types: 6.19.8
-
-  '@types/node@22.10.1':
-    dependencies:
-      undici-types: 6.20.0
 
   '@types/node@22.10.2':
     dependencies:
@@ -5557,7 +5550,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
     optional: true
 
   '@types/retry@0.12.0': {}
@@ -5565,7 +5558,7 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/serve-index@1.9.4':
     dependencies:
@@ -5574,12 +5567,12 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       '@types/send': 0.17.4
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/triple-beam@1.3.5': {}
 
@@ -5589,7 +5582,7 @@ snapshots:
 
   '@types/ws@8.5.13':
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -7777,7 +7770,7 @@ snapshots:
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -7785,13 +7778,13 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
   jest-worker@29.7.0:
     dependencies:
-      '@types/node': 22.10.1
+      '@types/node': 22.10.2
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1

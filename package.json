@@ -12,7 +12,7 @@
     "@battis/eslint-config": "^2.0.1",
     "@battis/partly-gcloudy": "^0.6.0",
     "@battis/prettier-config": "^1.5.5",
-    "@battis/qui-cli": "^0.8.4",
+    "@battis/qui-cli": "^0.8.5",
     "@battis/webpack": "latest",
     "@types/node": "^22.10.2",
     "npm-run-all": "^4.1.5",
