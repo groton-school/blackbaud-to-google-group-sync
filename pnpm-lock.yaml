@@ -22,7 +22,7 @@ importers:
         version: 0.8.5
       '@battis/webpack':
         specifier: latest
-        version: 2.0.1(5wbpmxzzzzzqgy3gutbwotoase)
+        version: 2.0.2(5wbpmxzzzzzqgy3gutbwotoase)
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.2
@@ -151,8 +151,8 @@ packages:
   '@battis/typescript-tricks@0.4.3':
     resolution: {integrity: sha512-7uHRia+kAWWXbTJFMjax3XXmTSIAAnqegLFONN9dAjMv1T5dqRTj+adkKcAlUrZBBQq3A2f0pZz8OFWNwXYTOg==}
 
-  '@battis/webpack@2.0.1':
-    resolution: {integrity: sha512-iEPFRrZ8HEnkXvn5N7q35RdOvQycRydbyio/fILis3JVuZfQcktYKGA2OsXg/QM5J9ISolQzwbJlA9MH8nkt3w==}
+  '@battis/webpack@2.0.2':
+    resolution: {integrity: sha512-4AJNY+vbhb5ZjQZwqxxZVQEInDaGoPnOx5w4a54VeNpbdlbQ1W+7aLOPPhFy/oKtM8zXvjXbXsY2T37aNI5taA==}
     engines: {node: '>=12.17'}
     peerDependencies:
       add-peer-dependencies: '*'
@@ -4881,7 +4881,7 @@ snapshots:
 
   '@battis/typescript-tricks@0.4.3': {}
 
-  '@battis/webpack@2.0.1(5wbpmxzzzzzqgy3gutbwotoase)':
+  '@battis/webpack@2.0.2(5wbpmxzzzzzqgy3gutbwotoase)':
     dependencies:
       app-root-path: 3.1.0
       copy-webpack-plugin: 11.0.0(webpack@5.91.0)
