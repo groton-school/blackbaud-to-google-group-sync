@@ -9,7 +9,7 @@
     "update": "pnpm up; npm up --lock-file-only"
   },
   "devDependencies": {
-    "@battis/eslint-config": "^2.0.1",
+    "@battis/eslint-config": "^2.0.3",
     "@battis/partly-gcloudy": "^0.6.0",
     "@battis/prettier-config": "^1.5.5",
     "@battis/qui-cli": "^0.8.5",
