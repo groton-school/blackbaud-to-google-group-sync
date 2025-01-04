@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@battis/eslint-config':
-        specifier: ^2.0.1
-        version: 2.0.1(@eslint/js@8.57.0)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-plugin-html@7.1.0)(eslint-plugin-markdown@3.0.1(eslint@8.57.0))(eslint@8.57.0)(globals@13.24.0)(typescript-eslint@8.18.0(eslint@8.57.0)(typescript@5.7.2))(typescript@5.7.2)
+        specifier: ^2.0.3
+        version: 2.0.3(@eslint/js@8.57.0)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-plugin-html@7.1.0)(eslint-plugin-markdown@3.0.1(eslint@8.57.0))(eslint@8.57.0)(globals@13.24.0)(typescript-eslint@8.18.0(eslint@8.57.0)(typescript@5.7.2))(typescript@5.7.2)
       '@battis/partly-gcloudy':
         specifier: ^0.6.0
         version: 0.6.0
@@ -22,7 +22,7 @@ importers:
         version: 0.8.5
       '@battis/webpack':
         specifier: latest
-        version: 2.0.1(5wbpmxzzzzzqgy3gutbwotoase)
+        version: 2.0.2(5wbpmxzzzzzqgy3gutbwotoase)
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.2
@@ -96,8 +96,8 @@ packages:
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
 
-  '@battis/eslint-config@2.0.1':
-    resolution: {integrity: sha512-P2uG6nuX5+nhm85t30jhTdy2ZuSAOIbw8aCiD+YvdMtAO5VAd7mSu0TL24gDTB3U/q+B26h7OH8HJUFNVOZ4XQ==}
+  '@battis/eslint-config@2.0.3':
+    resolution: {integrity: sha512-O8HsLPplEj1li1eot7EgmG+LkIcnf/kwfJMR8WrV9MCEfiNAsreEi45AtQaVij57rs8SAvH33NWTg3G4j1YeJA==}
     peerDependencies:
       '@eslint/js': '*'
       eslint: '*'
@@ -151,8 +151,8 @@ packages:
   '@battis/typescript-tricks@0.4.3':
     resolution: {integrity: sha512-7uHRia+kAWWXbTJFMjax3XXmTSIAAnqegLFONN9dAjMv1T5dqRTj+adkKcAlUrZBBQq3A2f0pZz8OFWNwXYTOg==}
 
-  '@battis/webpack@2.0.1':
-    resolution: {integrity: sha512-iEPFRrZ8HEnkXvn5N7q35RdOvQycRydbyio/fILis3JVuZfQcktYKGA2OsXg/QM5J9ISolQzwbJlA9MH8nkt3w==}
+  '@battis/webpack@2.0.2':
+    resolution: {integrity: sha512-4AJNY+vbhb5ZjQZwqxxZVQEInDaGoPnOx5w4a54VeNpbdlbQ1W+7aLOPPhFy/oKtM8zXvjXbXsY2T37aNI5taA==}
     engines: {node: '>=12.17'}
     peerDependencies:
       add-peer-dependencies: '*'
@@ -4763,7 +4763,7 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@battis/eslint-config@2.0.1(@eslint/js@8.57.0)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-plugin-html@7.1.0)(eslint-plugin-markdown@3.0.1(eslint@8.57.0))(eslint@8.57.0)(globals@13.24.0)(typescript-eslint@8.18.0(eslint@8.57.0)(typescript@5.7.2))(typescript@5.7.2)':
+  '@battis/eslint-config@2.0.3(@eslint/js@8.57.0)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-plugin-html@7.1.0)(eslint-plugin-markdown@3.0.1(eslint@8.57.0))(eslint@8.57.0)(globals@13.24.0)(typescript-eslint@8.18.0(eslint@8.57.0)(typescript@5.7.2))(typescript@5.7.2)':
     dependencies:
       '@eslint/js': 8.57.0
       eslint: 8.57.0
@@ -4881,7 +4881,7 @@ snapshots:
 
   '@battis/typescript-tricks@0.4.3': {}
 
-  '@battis/webpack@2.0.1(5wbpmxzzzzzqgy3gutbwotoase)':
+  '@battis/webpack@2.0.2(5wbpmxzzzzzqgy3gutbwotoase)':
     dependencies:
       app-root-path: 3.1.0
       copy-webpack-plugin: 11.0.0(webpack@5.91.0)
