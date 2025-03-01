@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@battis/eslint-config": "^2.0.3",
-    "@battis/partly-gcloudy": "^0.6.0",
+    "@battis/partly-gcloudy": "^0.6.3",
     "@battis/prettier-config": "^1.5.6",
     "@battis/qui-cli": "^0.9.1",
     "@battis/webpack": "latest",
