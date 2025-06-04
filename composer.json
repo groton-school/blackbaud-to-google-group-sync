@@ -1,6 +1,7 @@
 {
   "name": "groton/blackbaud-to-google-group-sync",
   "description": "Sync entries in Blackbaud LMS Advanced Lists (potentially of community groups) to Google Groups",
+  "version": "1.5.0",
   "require": {
     "ext-curl": "*",
     "ext-memcached": "*",
@@ -8,6 +9,7 @@
     "google/apiclient": "^2.12",
     "google/appengine-php-sdk": "^2.1",
     "groton-school/oauth2-blackbaudsky": "^0.2",
+    "marcocesarato/php-conventional-changelog": "^1.17",
     "monolog/monolog": "^3.3",
     "ramsey/uuid": "^4.7"
   },
