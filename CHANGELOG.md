@@ -1,10 +1,17 @@
 <!--- BEGIN HEADER -->
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
-
 <!--- END HEADER -->
+
+## [1.5.1](https://github.com/groton-school/blackbaud-to-google-group-sync/compare/v1.5.0...v1.5.1) (2025-06-04)
+
+### Bug Fixes
+
+* Avoid race condition when concurrently refreshing access token ([90a77a](https://github.com/groton-school/blackbaud-to-google-group-sync/commit/90a77aa2da8d6149106e68c8033cc19765e69a99))
+
+
+---
 
 ## [1.5.0](https://github.com/groton-school/blackbaud-to-google-group-sync/compare/v1.4.2...v1.5.0) (2024-07-23)
 

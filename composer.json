@@ -1,34 +1,34 @@
 {
-  "name": "groton-school/blackbaud-to-google-group-sync",
-  "description": "Sync entries in Blackbaud LMS Advanced Lists (potentially of community groups) to Google Groups",
-  "version": "1.5.0",
-  "require": {
-    "ext-curl": "*",
-    "ext-memcached": "*",
-    "battis/lazy-secrets": "^1.1",
-    "google/apiclient": "^2.12",
-    "google/appengine-php-sdk": "^2.1",
-    "groton-school/oauth2-blackbaudsky": "^0.2",
-    "marcocesarato/php-conventional-changelog": "^1.17",
-    "monolog/monolog": "^3.3",
-    "ramsey/uuid": "^4.7"
-  },
-  "license": "GPL-3.0",
-  "authors": [
-    {
-      "name": "Seth Battis",
-      "homepage": "https://github.com/groton-school"
+    "name": "groton-school/blackbaud-to-google-group-sync",
+    "description": "Sync entries in Blackbaud LMS Advanced Lists (potentially of community groups) to Google Groups",
+    "version": "1.5.1",
+    "require": {
+        "ext-curl": "*",
+        "ext-memcached": "*",
+        "battis/lazy-secrets": "^1.1",
+        "google/apiclient": "^2.12",
+        "google/appengine-php-sdk": "^2.1",
+        "groton-school/oauth2-blackbaudsky": "^0.2",
+        "marcocesarato/php-conventional-changelog": "^1.17",
+        "monolog/monolog": "^3.3",
+        "ramsey/uuid": "^4.7"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Seth Battis",
+            "homepage": "https://github.com/groton-school"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GrotonSchool\\BlackbaudToGoogleGroupSync\\": "src/server"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "analyze": "./tools/phpstan analyze"
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "GrotonSchool\\BlackbaudToGoogleGroupSync\\": "src/server"
-    }
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "scripts": {
-    "analyze": "./tools/phpstan analyze"
-  }
 }
