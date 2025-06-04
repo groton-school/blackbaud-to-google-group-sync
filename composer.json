@@ -1,5 +1,5 @@
 {
-  "name": "groton/blackbaud-to-google-group-sync",
+  "name": "groton-school/blackbaud-to-google-group-sync",
   "description": "Sync entries in Blackbaud LMS Advanced Lists (potentially of community groups) to Google Groups",
   "version": "1.5.0",
   "require": {
