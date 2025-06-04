@@ -11,25 +11,27 @@ use GrotonSchool\OAuth2\Client\Provider\BlackbaudSKY;
 class SKY
 {
     // environment variables
-    const Bb_ACCESS_KEY = 'BLACKBAUD_ACCESS_KEY';
-    const Bb_CLIENT_ID = 'BLACKBAUD_CLIENT_ID';
-    const Bb_CLIENT_SECRET = 'BLACKBAUD_CLIENT_SECRET';
-    const Bb_REDIRECT_URL = 'BLACKBAUD_REDIRECT_URL';
-    const Bb_TOKEN = 'BLACKBAUD_API_TOKEN';
+    public const Bb_ACCESS_KEY = 'BLACKBAUD_ACCESS_KEY';
+    public const Bb_CLIENT_ID = 'BLACKBAUD_CLIENT_ID';
+    public const Bb_CLIENT_SECRET = 'BLACKBAUD_CLIENT_SECRET';
+    public const Bb_REDIRECT_URL = 'BLACKBAUD_REDIRECT_URL';
+    public const Bb_TOKEN = 'BLACKBAUD_API_TOKEN';
 
     // keys
-    const OAuth2_STATE = 'oauth2_state';
-    const Request_URI = 'request_uri';
+    public const OAuth2_STATE = 'oauth2_state';
+    public const Request_URI = 'request_uri';
 
     // oauth2 terms
-    const CODE = 'code';
-    const STATE = 'state';
-    const AUTHORIZATION_CODE = 'authorization_code';
-    const REFRESH_TOKEN = 'refresh_token';
+    public const CODE = 'code';
+    public const STATE = 'state';
+    public const AUTHORIZATION_CODE = 'authorization_code';
+    public const REFRESH_TOKEN = 'refresh_token';
 
     private static ?Memcached $cache = null;
     private static ?BlackbaudSKY $api = null;
     private static ?Cache $secrets = null;
+
+    private const SEMAPHORE = 'semaphore';
 
     public static function api()
     {
@@ -68,6 +70,10 @@ class SKY
         $get,
         $interactive = true
     ) {
+        while (self::cache()->get(self::SEMAPHORE)) {
+            usleep(100);
+        }
+        self::cache()->set(self::SEMAPHORE, 'mine', 30);
         $cachedToken = self::secrets()->get(self::Bb_TOKEN, true);
         $token = $cachedToken ? new AccessToken($cachedToken) : null;
 
@@ -120,6 +126,7 @@ class SKY
         } else {
             self::api()->setAccessToken($token);
         }
+        self::cache()->delete(self::SEMAPHORE);
 
         return $token;
     }
