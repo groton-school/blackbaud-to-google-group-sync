@@ -5,7 +5,8 @@ namespace GrotonSchool\BlackbaudToGoogleGroupSync\Sync;
 use Exception;
 use JsonSerializable;
 use Google\AppEngine\Api\Memcache\Memcached;
-use Monolog\Handler\SyslogHandler;
+use Google\Cloud\Logging\LoggingClient;
+use Monolog\Handler\PsrHandler;
 use Monolog\Level;
 use Monolog\Logger;
 use Ramsey\Uuid\Uuid;
@@ -27,10 +28,10 @@ class Progress implements JsonSerializable
     public function __construct(array $params = [])
     {
         $this->cache = new Memcached();
-        $this->logger = new Logger('blackbaud-to-google-group-sync');
-        $this->logger->pushHandler(
-            new SyslogHandler('sync', LOG_USER, Level::Debug)
-        );
+        $loggerName = 'blackbaud-to-google-group-sync';
+        $logger = LoggingClient::psrBatchLogger($loggerName);
+        $this->logger = new Logger($loggerName);
+        $this->logger->pushHandler(new PsrHandler($logger));
         $this->reset($params);
     }
 
