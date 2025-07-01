@@ -12,7 +12,7 @@
         "@battis/partly-gcloudy": "^1.1.5",
         "@battis/prettier-config": "^1.6.0",
         "@battis/qui-cli.colors": "^2.0.1",
-        "@battis/qui-cli.core": "^2.1.0",
+        "@battis/qui-cli.core": "^2.2.0",
         "@battis/qui-cli.env": "^2.0.4",
         "@battis/qui-cli.log": "^2.1.0",
         "@battis/qui-cli.plugin": "^2.3.1",
