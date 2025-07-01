@@ -17,7 +17,7 @@
         "@battis/qui-cli.log": "^2.1.0",
         "@battis/qui-cli.plugin": "^2.3.1",
         "@battis/qui-cli.root": "^2.0.2",
-        "@battis/qui-cli.validators": "^2.0.1",
+        "@battis/qui-cli.validators": "^2.0.3",
         "@battis/webpack": "^2.0.5",
         "@inquirer/prompts": "^7.5.3",
         "@types/node": "^22.15.29",
