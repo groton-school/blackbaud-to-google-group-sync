@@ -1,7 +1,7 @@
 import gcloud from '@battis/partly-gcloudy';
 import { Colors } from '@battis/qui-cli.colors';
 import { Core } from '@battis/qui-cli.core';
-import '@battis/qui-cli.env';
+import { Env } from '@battis/qui-cli.env';
 import { Log } from '@battis/qui-cli.log';
 import * as Plugin from '@battis/qui-cli.plugin';
 import { Root } from '@battis/qui-cli.root';
@@ -240,6 +240,7 @@ async function run() {
 }
 
 Root.configure({ root: path.dirname(import.meta.dirname) });
+Env.configure();
 await Plugin.register({
   name: 'deploy',
   src: path.resolve(path.dirname(import.meta.dirname), 'src'),
