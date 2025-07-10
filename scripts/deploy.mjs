@@ -24,7 +24,7 @@ let scheduleName = 'daily-blackbaud-to-google-group-sync';
 let scheduleCron = '0 1 * * *';
 
 function configure(config = {}) {
-  setup = Plugin.hydrate(config.force, !process.env.PROJECT);
+  setup = Plugin.hydrate(config.force, process.env.PROJECT);
   name = Plugin.hydrate(config.name, name);
   billing = Plugin.hydrate(config.billing, billing);
   region = Plugin.hydrate(config.region, region);
@@ -240,7 +240,7 @@ async function run() {
 }
 
 Root.configure({ root: path.dirname(import.meta.dirname) });
-Env.configure();
+await Env.configure();
 await Plugin.register({
   name: 'deploy',
   src: path.resolve(path.dirname(import.meta.dirname), 'src'),

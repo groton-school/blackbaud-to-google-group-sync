@@ -10,7 +10,7 @@ const sync = Options.add({
   enabled: false
 });
 
-fetch(`${process.env.URL}/ready`)
+fetch(`${URL}/ready`)
   .then((response) => response.json())
   .then(({ ready }) => {
     if (ready) {
