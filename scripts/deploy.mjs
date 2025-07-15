@@ -1,7 +1,7 @@
 import gcloud from '@battis/partly-gcloudy';
 import { Colors } from '@battis/qui-cli.colors';
 import { Core } from '@battis/qui-cli.core';
-import { Env } from '@battis/qui-cli.env';
+import { OP } from '@battis/qui-cli.env/1Password.js';
 import { Log } from '@battis/qui-cli.log';
 import * as Plugin from '@battis/qui-cli.plugin';
 import { Root } from '@battis/qui-cli.root';
@@ -24,7 +24,7 @@ let scheduleName = 'daily-blackbaud-to-google-group-sync';
 let scheduleCron = '0 1 * * *';
 
 function configure(config = {}) {
-  setup = Plugin.hydrate(config.force, process.env.PROJECT);
+  setup = Plugin.hydrate(config.force, !process.env.PROJECT);
   name = Plugin.hydrate(config.name, name);
   billing = Plugin.hydrate(config.billing, billing);
   region = Plugin.hydrate(config.region, region);
@@ -240,7 +240,7 @@ async function run() {
 }
 
 Root.configure({ root: path.dirname(import.meta.dirname) });
-await Env.configure();
+await OP.configure();
 await Plugin.register({
   name: 'deploy',
   src: path.resolve(path.dirname(import.meta.dirname), 'src'),
