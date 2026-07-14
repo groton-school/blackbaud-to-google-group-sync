@@ -1,3 +1,5 @@
+> This package was developed to work with data stored in Blackbaud SIS/LMS/SWS instances. We are no longer Blackbaud users, and therefore no longer actively maintaining this package. If you would like to discuss this tool, or the approaches it took to accessing otherwise inaccessible data in Blackbaud, please reach out directly to [Seth Battis](mailto:seth@battis.net?subject=Blackbaud-to-Google%20Group%20Sync)
+
 # Blackbaud-to-Google Group Sync
 
 Sync entries in Blackbaud LMS Advanced Lists (potentially of community groups) to Google Groups
